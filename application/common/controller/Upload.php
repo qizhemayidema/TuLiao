@@ -5,7 +5,7 @@ namespace app\common\controller;
 use think\Controller;
 use think\Request;
 
-class UploadPic extends Controller{
+class Upload extends Controller{
 
     /**
      * @param null $file_path 保存的目录

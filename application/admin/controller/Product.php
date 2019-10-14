@@ -2,7 +2,7 @@
 
 namespace app\admin\controller;
 
-use app\common\controller\UploadPic;
+use app\common\controller\Upload;
 use app\common\model\Article as ArticleModel;
 use think\Controller;
 use think\Request;
@@ -146,7 +146,7 @@ class Product extends Base
     public function uploadPic()
     {
         $path = 'product/';
-        return (new UploadPic())->uploadOnePic($path);
+        return (new Upload())->uploadOnePic($path);
     }
 
 }
