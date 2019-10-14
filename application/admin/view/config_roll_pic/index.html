@@ -1,0 +1,65 @@
+{include file="common/source"}
+<div class="col-sm-12">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>
+                <button type="button" onclick="window.location.href='{:url('/admin/Config_roll_pic/add')}'"
+                        class="btn btn-w-m btn-primary">添加图片
+                </button>
+            </h5>
+        </div>
+        <div class="ibox-content">
+            <div class="example">
+
+                <table class="table table-bordered table-hover text-center">
+                    <thead>
+                    <tr class="text-center">
+                        <th style="text-align: center;">图片</th>
+                        <th style="text-align: center;">跳转链接</th>
+                        <th style="text-align: center;">排序</th>
+                        <th style="text-align: center;">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach $image as $key => $value}
+                    <tr>
+                        <td><img src="{$value->img}" alt="" style="width: 75px;"></td>
+                        <td><a target="_blank" href="{$value->url}">{$value->url}</a></td>
+                        <td>{$value->order_num}</td>
+                        <td>
+                            <button onclick="window.location.href='{:url('admin/Config_roll_pic/edit',['img_id'=>$value->id])}'" class="btn btn-info" type="button"><i class="fa fa-paste"></i> 编辑</button>
+                            <button onclick="removeArticle(this,'{$value->id}')" class="btn btn-danger" type="button"><i class="fa fa-remove"></i> <span class="bold">删除</span></button>
+                        </td>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+            <div style="text-align: center;">
+                {$image->render()|raw}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+
+    var removeArticle = function (_this, article_id) {
+        $.ajax({
+            url: "{:url('admin/Config_roll_pic/delete')}",
+            type: 'post',
+            dataType: 'json',
+            data:{
+                img_id : article_id,
+            },
+            success: function (data) {
+                if (data.code == 0) {
+                    layer.msg(data.msg,{icon: 5})
+                } else {
+                    layer.msg('删除成功',{icon : 1})
+                    $(_this).parents('tr').remove();
+                }
+            }
+        })
+    }
+</script>
