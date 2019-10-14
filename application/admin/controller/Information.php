@@ -80,6 +80,7 @@ class Information extends Base
         ];
 
         ArticleModel::insert($insert);
+        CateModel::where(['id'=>$insert['cate_id']])->setInc('data_sum');
 
         return json(['code'=>1,'msg'=>'success']);
     }
@@ -143,7 +144,14 @@ class Information extends Base
         ];
         if ($data['pic']) $update['pic'] = $data['pic'];
 
+        $old_cate_id = ArticleModel::where(['id'=>$data['id']])->value('cate_id');
+        CateModel::where(['id'=>$old_cate_id])->setDec('data_sum');
+
+
         ArticleModel::where(['id'=>$data['id']])->update($update);
+
+        CateModel::where(['id'=>$data['id']])->setInc('data_sum');
+
 
         return json(['code'=>1,'msg'=>'success']);
     }

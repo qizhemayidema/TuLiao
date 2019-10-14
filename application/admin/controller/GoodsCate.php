@@ -2,22 +2,23 @@
 
 namespace app\admin\controller;
 
-use app\common\model\Article;
-use app\common\model\Category as CategoryModel;
-use app\common\model\Article as ArticleModel;
 use think\Controller;
 use think\Request;
+use app\common\model\Category as CategoryModel;
+use app\common\model\Goods as GoodsModel;
 use think\Validate;
 
-class InformationCate extends Base
-{
-    public $cateType = 2;
+class GoodsCate extends Base
 
-    public $cacheName = 'informationCate';
+{
+    public $cateType = 5;
+
+    public $cacheName = 'goodsCate';
 
     public function index()
     {
-        $cate = (new CategoryModel())->getList($this->cacheName,$this->cateType);
+        $categoryModel = new CategoryModel();
+        $cate = $categoryModel->getList($this->cacheName,$this->cateType);
 
         $this->assign('cate',$cate);
 
@@ -26,6 +27,12 @@ class InformationCate extends Base
 
     public function add()
     {
+
+        $pCate = (new CategoryModel())->where(['p_id'=>0,'type'=>$this->cateType])->order('id','desc')->select();
+
+        $this->assign('pCate',$pCate);
+
+
         return $this->fetch();
     }
 
@@ -34,12 +41,14 @@ class InformationCate extends Base
         $data = $request->post();
 
         $rules = [
+            'p_id'  => 'require',
             'name'  => 'require|max:60',
             'order_num' => 'require|between:0,999',
             '__token__'     => 'token',
         ];
 
         $messages = [
+            'p_id.require'  => '必须选择一个所属节点',
             'name.require'  => '名称必须填写',
             'name.max'      => '名称最大60个字符',
             'order_num.require' => '排序必须填写',
@@ -53,6 +62,7 @@ class InformationCate extends Base
         }
 
         $insert = [
+            'p_id'  => $data['p_id'],
             'type'  => $this->cateType,
             'name'  => $data['name'],
             'order_num' => $data['order_num'],
@@ -71,6 +81,12 @@ class InformationCate extends Base
 
         $this->assign('cate',$cate);
 
+        $pCate = (new CategoryModel())->where(['p_id'=>0,'type'=>$this->cateType])
+            ->where('id','<>',$cate_id)->order('id','desc')->select();
+
+        $this->assign('pCate',$pCate);
+
+
         return $this->fetch();
     }
 
@@ -80,12 +96,14 @@ class InformationCate extends Base
 
         $rules = [
             'id'        => 'require',
+            'p_id'      => 'require',
             'name'  => 'require|max:60',
             'order_num' => 'require|between:0,999',
             '__token__'     => 'token',
         ];
 
         $messages = [
+            'p_id.require'  => '必须选择一个父级节点',
             'name.require'  => '名称必须填写',
             'name.max'      => '名称最大60个字符',
             'order_num.require' => '排序必须填写',
@@ -98,6 +116,7 @@ class InformationCate extends Base
             return json(['code'=>0,'msg'=>$validate->getError()]);
         }
         $update = [
+            'p_id'  => $data['p_id'],
             'type'  => $this->cateType,
             'name'  => $data['name'],
             'order_num' => $data['order_num'],
@@ -115,16 +134,20 @@ class InformationCate extends Base
     {
         $cate_id = $request->post('cate_id');
 
-        $is_exists = ArticleModel::where(['cate_id'=>$cate_id])->find();
+        $is_exists = GoodsModel::where(['cate_id'=>$cate_id])->find();
 
-        if ($is_exists) return json(['code'=>0,'msg'=>'有资讯正在使用此分类']);
+        if ($is_exists) return json(['code'=>0,'msg'=>'有商品正在使用此分类']);
+
+        $cate_exists = CategoryModel::where(['p_id'=>$cate_id])->find();
+
+        if ($cate_exists) return json(['code'=>0,'msg'=>'此分类有子分类']);
 
         CategoryModel::where(['id'=>$cate_id])->delete();
 
         (new CategoryModel())->clearCache($this->cacheName);
 
         return json(['code'=>1,'msg'=>'success']);
-        
+
     }
 
 }
