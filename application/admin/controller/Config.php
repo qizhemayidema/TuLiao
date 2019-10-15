@@ -22,13 +22,17 @@ class Config extends Base
         $post = $request->post();
 
         $data = [
+            "description"                => $post['description'],
+            "keywords"                   => $post['keywords'],
             'index_information_qrCode_1' => $post['index_information_qrCode_1'],
             'index_information_qrCode_2' => $post['index_information_qrCode_2'],
             'hotLine'                    => $post['hotLine'],
             'address'                    => $post['address'],
             'phone'                      => $post['phone'],
             'fax'                        => $post['fax'],
-            'email'                      => $post['email']
+            'email'                      => $post['email'],
+            "business_parters"           => $post['business_parters'],
+            "information_banner"         => $post['information_banner']
         ];
 
 
@@ -37,7 +41,6 @@ class Config extends Base
         return json(['code'=>1,'msg'=>'success']);
 
     }
-
 
     //上传课程封面
     public function uploadPic()
