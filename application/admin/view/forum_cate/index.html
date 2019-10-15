@@ -3,7 +3,7 @@
     <div class="ibox float-e-margins">
         <div class="ibox-title">
             <h5>
-                <button type="button" onclick="window.location.href='{:url('/admin/Information_cate/add')}'"
+                <button type="button" onclick="window.location.href='{:url('/admin/Forum_cate/add')}'"
                         class="btn btn-w-m btn-primary">添加分类
                 </button>
             </h5>
@@ -15,7 +15,6 @@
                     <thead>
                     <tr class="text-center">
                         <th style="text-align: center;">分类名称</th>
-                        <th style="text-align: center;">资讯数量</th>
                         <th style="text-align: center;">排序</th>
                         <th style="text-align: center;">操作</th>
                     </tr>
@@ -24,10 +23,9 @@
                     {foreach $cate as $key => $value}
                     <tr>
                         <td>{$value.name}</td>
-                        <td>{$value.data_sum}</td>
                         <td>{$value.order_num}</td>
                         <td>
-                            <button onclick="window.location.href='{:url('admin/Information_cate/edit',['cate_id'=>$value.id])}'" class="btn btn-info" type="button"><i class="fa fa-paste"></i> 编辑</button>
+                            <button onclick="window.location.href='{:url('admin/Forum_cate/edit',['cate_id'=>$value.id])}'" class="btn btn-info" type="button"><i class="fa fa-paste"></i> 编辑</button>
                             <button onclick="removeArticle(this,'{$value.id}')" class="btn btn-danger" type="button"><i class="fa fa-remove"></i> <span class="bold">删除</span></button>
                         </td>
                     </tr>
@@ -43,7 +41,7 @@
 
     var removeArticle = function (_this, article_id) {
         $.ajax({
-            url: "{:url('admin/Information_cate/delete')}",
+            url: "{:url('admin/Forum_cate/delete')}",
             type: 'post',
             dataType: 'json',
             data:{
