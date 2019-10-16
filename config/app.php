@@ -146,4 +146,7 @@ return [
 
     'upload_root_path'      => '/static/uploads/',
 
+
+    'index_user_session_path' => 'index.user_info',
+
 ];

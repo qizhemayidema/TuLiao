@@ -1,0 +1,384 @@
+{extend name="base/base"}
+
+{block name="title"}首页{/block}
+
+{block name="body"}
+<!-- banner -->
+<div class="banner_box">
+    <div class="slider single-item">
+        {foreach $roll_pic as $key => $value}
+        <div>
+            <a href="{$value.url}" class="banner" style="background-image: url({$value.img});"></a>
+        </div>
+        {/foreach}
+    </div>
+</div>
+<!--  -->
+<div class="w1200 index_class">
+    <div class="i_class_box bgf">
+        <div class="i_class_title tac cf fz16" onclick="change_goods_cate_list()">
+            商品分类
+            <span class="icon-13"></span>
+        </div>
+        <div class="i_class_list" id="goods_cate_list">
+            {foreach $goods_cate as $key => $value}
+            <div>
+                <a href="" class="class_top_name oh bb1">
+                    <h3 class="oh fl red fz16">{$value.name}</h3>
+                    <span class="fz14 c9 fr">></span>
+                </a>
+                <div class="p0_15 oh i_class_a">
+                    <!-- 限制6条 -->
+                    {if isset($value.children)}
+                    {foreach $value.children as $key => $value}
+                    <a href="">{$value.name}</a>
+                    {/foreach}
+                    {/if}
+                </div>
+            </div>
+            {/foreach}
+        </div>
+    </div>
+</div>
+
+<div class="w1200 oh">
+    <div class="fl w260">&nbsp;</div>
+    <div class="fl tl_box oh">
+        {foreach $hot_product as $key => $value}
+        {if $key == 7}
+        {break}
+        {/if}
+        {/foreach}
+    </div>
+</div>
+
+<div class="w1200 oh">
+    <div class="fl red fz16 hot_name">热点产品：</div>
+    <div class="fl oh hot_list">
+        {foreach $hot_product as $key => $value}
+        <a href="" class="fz16 c6">{$value.title}</a>
+        {/foreach}
+    </div>
+</div>
+<div class="w1200">
+    <div class="index_bt oh">
+        <h3 class="index_bt_h3">资 讯</h3>
+        <div class="index_a_box">
+            {foreach $top_information as $key => $value}
+            <a href="" class="fz16 cf tac">{$value.name}</a>
+            {/foreach}
+
+        </div>
+    </div>
+    <div class="oh">
+        <div class="fl w500">
+            <div class="img_tab mb10">
+                <div class="img_box">
+                    <!-- 最多三条 -->
+                    {foreach $information_roll_pic as $key => $value}
+                    <div class="img_box_list">
+                        <a href="{$value.url}"><img src="{$value.img}" alt=""></a>
+                        <div class="img_info_str">
+                            <a href="{$value.url}" class="fz16 cf ">{$value.title}</a>
+                        </div>
+                    </div>
+                    {/foreach}
+
+                </div>
+                <div class="tab_btn">
+                </div>
+            </div>
+            <div class="code_box bd1">
+                <div class="p15 tac oh">
+                    <div class="code_list oh">
+                        <div class="fl">
+                            <div class=" fz18 code_str">扫码进群咨询</div>
+                        </div>
+                        <img src="{$information_qr_code_1}" alt="" class="code_img">
+                    </div>
+                    <div class="code_list oh">
+                        <div class="fl oh">
+                            <div class=" fz18 code_str fl">扫码获得氟碳</div>
+                            <div class=" fz18 code_str fl">涂料最新资讯</div>
+                        </div>
+                        <img src="{$information_qr_code_2}" alt="" class="code_img">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="fl w700">
+            {foreach $information_cate as $key => $value}
+                {if $key != 0}
+                    <div class="kuang mb10 ml10 fl">
+                        <div class="kuang_title">
+                            <h3 class="fz18 c3 fl">{$value.name}</h3>
+                            <a href="" class="k_more fz14 c3">+更多</a>
+                            <p></p>
+                        </div>
+                        <!--  -->
+                        <div class="p13">
+                            {foreach $value.article as $key => $value}
+                            {if $key == 0}
+                            <a href="" class="k_title oh">
+                                <img src="{$value.pic}" alt="" class="k_img">
+                                <div class="k_info oh">
+                                    <h3 class="fz16">{$value.title}</h3>
+                                    <p class="fz14 c6">{$value.desc}</p>
+                                </div>
+                            </a>
+                            {else}
+                            <a href="" class="k_list">{$value.title}</a>
+                            {/if}
+                            {/foreach}
+                        </div>
+                    </div>
+                {/if}
+            {/foreach}
+        </div>
+    </div>
+    <div class="k1 mb10">
+        {foreach $information_cate as $key => $value}
+        {if $key != 0} <?php break; ?> {/if}
+        <div class="kuang_title">
+            <h3 class="fz18 c3 fl">{$value.name}</h3>
+            <a href="" class="k_more fz14 c3">+更多</a>
+            <p></p>
+        </div>
+        <div class="oh">
+            <div class="zanhui_box">
+                {if $key == 0}
+                    {foreach $value.article as $key => $value}
+                <a href="" class="zanhui_list">
+                    <img src="{$value.pic}" alt="">
+                    <p class="tac">2{$value.title}</p>
+                </a>
+                    {/foreach}
+                {/if}
+
+            </div>
+        </div>
+        {/foreach}
+
+    </div>
+    <div class="index_bt oh">
+        <h3 class="index_bt_h3">涂料社区</h3>
+        <a href="" class="index_bt_more">进入社区>></a>
+    </div>
+    <div class="oh mb10">
+        <div class="w888 k1 fl">
+            <div class="tuliao_box">
+                <a href="" class="tuliao_list">
+                    <h3 class="t_title fz20 c3">聚醚醚酮PEEK棒的机械性能优异是因为它兼备韧性和刚性</h3>
+                    <p class="t_info fz16 c6">PEEK棒(聚醚醚酮)是具备优异的特种性能，与其他的工程塑料相比更具优势，它具备很强的耐高温性，空气中最大允许工作温度介于260度和310度之间；良好的自润滑性，能作用于如：套筒轴承、滑动轴承...密封圈等要求摩擦性能强的领域；稳定的绝缘性，而且机械性能特别优异，能耐化学品的腐蚀，阻燃、耐水解等。</p>
+                    <div class="oh t_time_box">
+                        <div class="time fl fz14 c9 lh30 oh">
+                            <p>2019-06-06 06:00</p>
+                        </div>
+                        <div class="t_icon_box fr lh30">
+                            <div class="fl oh t_icon_list">
+                                <span class="fl lh30 icon--- fz18"></span>
+                                <p class="fl">1898</p>
+                            </div>
+                            <div class="fl oh t_icon_list">
+                                <span class="fl lh30 icon-7 fz14"></span>
+                                <p class="fl">123</p>
+                            </div>
+                            <div class="fl oh t_icon_list">
+                                <span class="fl lh30 icon-2 fz14"></span>
+                                <p class="fl">111</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a href="" class="tuliao_list">
+                    <h3 class="t_title fz20 c3">聚醚醚酮PEEK棒的机械性能优异是因为它兼备韧性和刚性</h3>
+                    <p class="t_info fz16 c6">PEEK棒(聚醚醚酮)是具备优异的特种性能，与其他的工程塑料相比更具优势，它具备很强的耐高温性，空气中最大允许工作温度介于260度和310度之间；良好的自润滑性，能作用于如：套筒轴承、滑动轴承...密封圈等要求摩擦性能强的领域；稳定的绝缘性，而且机械性能特别优异，能耐化学品的腐蚀，阻燃、耐水解等。</p>
+                    <div class="oh t_time_box">
+                        <div class="time fl fz14 c9 lh30 oh">
+                            <p>2019-06-06 06:00</p>
+                        </div>
+                        <div class="t_icon_box fr lh30">
+                            <div class="fl oh t_icon_list">
+                                <span class="fl lh30 icon--- fz18"></span>
+                                <p class="fl">1898</p>
+                            </div>
+                            <div class="fl oh t_icon_list">
+                                <span class="fl lh30 icon-7 fz14"></span>
+                                <p class="fl">123</p>
+                            </div>
+                            <div class="fl oh t_icon_list">
+                                <span class="fl lh30 icon-2 fz14"></span>
+                                <p class="fl">111</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a href="" class="tuliao_list">
+                    <h3 class="t_title fz20 c3">聚醚醚酮PEEK棒的机械性能优异是因为它兼备韧性和刚性</h3>
+                    <p class="t_info fz16 c6">PEEK棒(聚醚醚酮)是具备优异的特种性能，与其他的工程塑料相比更具优势，它具备很强的耐高温性，空气中最大允许工作温度介于260度和310度之间；良好的自润滑性，能作用于如：套筒轴承、滑动轴承...密封圈等要求摩擦性能强的领域；稳定的绝缘性，而且机械性能特别优异，能耐化学品的腐蚀，阻燃、耐水解等。</p>
+                    <div class="oh t_time_box">
+                        <div class="time fl fz14 c9 lh30 oh">
+                            <p>2019-06-06 06:00</p>
+                        </div>
+                        <div class="t_icon_box fr lh30">
+                            <div class="fl oh t_icon_list">
+                                <span class="fl lh30 icon--- fz18"></span>
+                                <p class="fl">1898</p>
+                            </div>
+                            <div class="fl oh t_icon_list">
+                                <span class="fl lh30 icon-7 fz14"></span>
+                                <p class="fl">123</p>
+                            </div>
+                            <div class="fl oh t_icon_list">
+                                <span class="fl lh30 icon-2 fz14"></span>
+                                <p class="fl">111</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="w298 k1 fr">
+            <div class="f1_tab_title">
+                <p class="active">今日头条</p>
+                <a href="" class="fr more w_more">
+                    更多》
+                </a>
+            </div>
+            <div class="tab_box">
+                <div class="index_recom_list">
+                    <a href="">全国千公里战况：上海分速领跑各路大军</a>
+                    <a href="">北京爱亚卡普决战放飞2512羽 名家汇聚精彩纷呈</a>
+                    <a href="">枣阳鸽友勇夺千公里国家赛襄阳区冠军</a>
+                    <a href="">全国千公里湖北荆州前三甲风采</a>
+                    <a href="">铁鸽三项公棚300公里预赛正式开战</a>
+                    <a href="">宝鸡铁路鸽会秋季拍卖大会现场 鸽友送欧洲原环</a>
+                    <a href="">觽堂文化智库信鸽文化艺术联展欣赏</a>
+                    <a href="">逛得尽兴不虚此行！第五届郑州鸽展经典回放</a>
+                    <a href="">江苏四季赛鸽精神抖擞油光粉亮 五百公里集鸽</a>
+                    <a href="">全国千公里湖北荆州前三甲风采</a>
+                    <a href="">铁鸽三项公棚300公里预赛正式开战</a>
+                    <a href="">宝鸡铁路鸽会秋季拍卖大会现场 鸽友送欧洲原环</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="index_bt oh">
+        <h3 class="index_bt_h3">涂料商城</h3>
+        <a href="" class="index_bt_more">进入商城>></a>
+    </div>
+    <div class="k1 mb10">
+        <div class="p35">
+            <div class="oh">
+                {foreach $goods as $key => $value}
+                <div class="fl shop_list">
+                    <a href="">
+                        <img src="{$value.pic}" alt="">
+                        <div class="shop_price oh">
+                            <div class="fl red fz20 lh40">￥{$value.real_price}</div>
+                            <div class="fr red fz20 lh40"><span class="icon-4"></span></div>
+                        </div>
+                        <div class="shop_js fz14 c6">{$value.title}</div>
+                    </a>
+                </div>
+                {/foreach}
+            </div>
+        </div>
+    </div>
+    <div class="index_bt oh">
+        <h3 class="index_bt_h3">合作企业</h3>
+    </div>
+    <!-- 合作伙伴 -->
+    <div class="k1 mb20">
+        <div class="huoban_box oh">
+            <!-- 28条 -->
+            {foreach $business_parters as $key => $value}
+            {if $value}
+            <div class="huoban_list fl k1 tac">
+                <span></span>
+                <a href="">
+                    <img src="{$value}" alt="">
+                </a>
+            </div>
+            {/if}
+            {/foreach}
+            <!--  -->
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<script>
+
+    //开启加载层
+    function openload() {
+        $(".load_box").fadeIn(500);
+    };
+    //关闭加载层
+    function closeload() {
+        $(".load_box").fadeOut(500);
+    };
+    //加载完成关闭
+    $(window).load(function() {
+        closeload();
+    });
+    // banner
+    $('.single-item').slick({
+        dots: true,
+        speed: 500,
+        arrows: false,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 3000
+    });
+    // tab
+    $(".img_box_list").eq(0).show();
+    var _index = 0;
+    for (var i = 0; i < $(".img_box_list").length; i++) {
+        var _html;
+        if (i) {
+            var _html = '<button type="button" onclick="tab(' + i + ')"></button>';
+        } else {
+            var _html = '<button type="button" onclick="tab(' + i + ')" class="active"></button>';
+        };
+        $(".tab_btn").append(_html);
+    };
+
+    function tab(num) {
+        if (_index != num) {
+            _index = num;
+        };
+        showTab();
+    };
+
+    function showTab() {
+        $(".img_box_list").fadeOut(300);
+        $(".tab_btn button").removeClass('active');
+        $(".img_box_list").eq(_index).fadeIn(300);
+        $(".tab_btn button").eq(_index).addClass('active');
+    };
+
+    function getIndex() {
+        if (_index == $(".img_box_list").length - 1) {
+            _index = 0;
+        } else {
+            _index++;
+        };
+        showTab();
+    };
+    if ($(".img_box_list").length > 1) {
+        setInterval(getIndex, 3000)
+    };
+
+    var change_goods_cate_list = function(){
+        if($('#goods_cate_list').css('display') == 'none'){
+            $('#goods_cate_list').css('display','block')
+        }else{
+            $('#goods_cate_list').css('display','none')
+        }
+
+    }
+</script>
+{/block}

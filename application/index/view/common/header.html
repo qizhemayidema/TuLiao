@@ -1,0 +1,72 @@
+<div class="top_warpper">
+    <div class="top w1200 oh">
+        <p class="">您好，欢迎访问中国氟碳涂料网！</p>
+        <div class="login fr">
+            {if session(config('app.index_user_session_path'))}
+            <a href="javascript:void(0);" onclick="">{:session(config('app.index_user_session_path'))['nickname']}</a>
+            <a href="{:url('/index/Login/logout')}">退出</a>
+            {else}
+            <a href="javascript:void(0);" onclick="showMarks(loginHTML);">登录</a>
+            <a href="javascript:void(0);" onclick="showMarks(registerHTML);">注册</a>
+            {/if}
+            <a href="javascript:void(0);">联系我们</a>
+        </div>
+    </div>
+</div>
+<div class="logo_warpper bgf">
+    <div class="logo_box w1200 oh">
+        <a href="{:url('/')}" class="logo fl">
+            <img src="__STATIC__/images/i_03.jpg" alt="">
+        </a>
+        <div class="search oh fl">
+            <input type="text" placeholder="搜索关键字">
+            <button type="button"><img src="__STATIC__/images/search_btn_03.jpg" alt=""></button>
+        </div>
+        <div class="tel fr">
+            <p>咨询热线</p>
+            <h3>{$hot_line}</h3>
+        </div>
+    </div>
+</div>
+<div class="mb20">
+    <div class="w1200 oh ">
+        <div class="nav_list fl tac">
+            <a href="{:url('/')}" class="red fz18 nav_a h50 lh50">首页</a>
+        </div>
+        <div class="nav_list fl oh">
+            <a href="" class="c6 fz18 nav_a h50 lh50 tac br1 fl">产品</a>
+            <div class="a_list fl" style="width: 270px;">
+                {foreach $top_product as $key => $value}
+                <a href="">{$value.title}</a>
+                {/foreach}
+            </div>
+        </div>
+        <div class="nav_list fl oh">
+            <a href="" class="c6 fz18 nav_a h50 lh50 tac br1 fl">资讯</a>
+            <div class="a_list fl" style="width: 270px;">
+                {foreach $top_information as $key => $value}
+                <a href="">{$value.name}</a>
+                {/foreach}
+            </div>
+        </div>
+        <div class="nav_list fl oh">
+            <a href="" class="c6 fz18 nav_a h50 lh50 tac br1 fl">社区</a>
+            <div class="a_list fl" style="width: 180px;">
+                {foreach $top_forum as $key => $value}
+                <a href="">{$value.name}</a>
+                {/foreach}
+            </div>
+        </div>
+        <div class="nav_list fl oh">
+            <a href="" class="c6 fz18 nav_a h50 lh50 tac br1 fl">视频</a>
+            <div class="a_list fl" style="width: 90px;">
+                {foreach $top_video as $key => $value}
+                <a href="">{$value.name}</a>
+                {/foreach}
+            </div>
+        </div>
+        <div class="nav_list fl tac">
+            <a href="" class="red fz18 nav_a h50 lh50">商城</a>
+        </div>
+    </div>
+</div>

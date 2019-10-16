@@ -32,7 +32,8 @@ class Config extends Base
             'fax'                        => $post['fax'],
             'email'                      => $post['email'],
             "business_parters"           => $post['business_parters'],
-            "information_banner"         => $post['information_banner']
+            "information_banner"         => $post['information_banner'],
+            "footer_qr_code"             => $post['footer_qr_code'],
         ];
 
 

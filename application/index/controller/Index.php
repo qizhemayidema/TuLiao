@@ -1,15 +1,71 @@
 <?php
+
 namespace app\index\controller;
 
-class Index
+use app\admin\controller\InformationCate;
+use app\common\model\Article;
+use app\common\model\Category as CateModel;
+use app\common\model\Goods;
+use app\common\model\Image as Img;
+use app\admin\controller\GoodsCate as GoodsCateController;
+use app\admin\controller\InformationCate as InformationCateController;
+use app\admin\controller\Information as InformationController;
+use app\common\model\Goods as GoodsModel;
+
+
+class Index extends Base
 {
     public function index()
     {
-        return '<style type="text/css">*{ padding: 0; margin: 0; } div{ padding: 4px 48px;} a{color:#2E5CD5;cursor: pointer;text-decoration: none} a:hover{text-decoration:underline; } body{ background: #fff; font-family: "Century Gothic","Microsoft yahei"; color: #333;font-size:18px;} h1{ font-size: 100px; font-weight: normal; margin-bottom: 12px; } p{ line-height: 1.6em; font-size: 42px }</style><div style="padding: 24px 48px;"> <h1>:) </h1><p> ThinkPHP V5.1<br/><span style="font-size:30px">12载初心不改（2006-2018） - 你值得信赖的PHP框架</span></p></div><script type="text/javascript" src="https://tajs.qq.com/stats?sId=64890268" charset="UTF-8"></script><script type="text/javascript" src="https://e.topthink.com/Public/static/client.js"></script><think id="eab4b9f840753f8e7"></think>';
-    }
+        //轮播图
+        $roll_pic = Img::where(['type'=>1])->order('order_num','desc')->order('id','desc')->select();
 
-    public function hello($name = 'ThinkPHP5')
-    {
-        return 'hello,' . $name;
+        //资讯轮播图
+        $information_roll_pic = Img::where(['type'=>2])->order('order_num','desc')->order('id','desc')->select();
+
+        //资讯二维码
+        $information_qr_code_1 = $this->getConfig('index_information_qrCode_1');
+        $information_qr_code_2 = $this->getConfig('index_information_qrCode_2');
+
+
+        //商品分类
+        $gc = new GoodsCateController();
+        $goods_cate = (new CateModel())->getList($gc->cacheName,$gc->cateType);
+
+
+        //热门产品
+        $hot_product = Article::where(['type'=>1,'status'=>1,'delete_time'=>0])->order('click','desc')
+            ->limit(10)->field('id','title')->select();
+
+
+        //资讯排行前五的文章取出五个
+        //资讯分类
+        $ic = new InformationCateController();
+        $information_cate = CateModel::where(['type'=>$ic->cateType])->order('order_num','desc')
+        ->limit(5)->select()->toArray();
+
+        foreach ($information_cate as $key => $value){
+            $information_cate[$key]['article'] = Article::where(['type'=>(new InformationController())->articleType])
+                ->where(['cate_id'=>$value['id']])->where(['delete_time'=>0,'status'=>1])->limit(5)->select();
+        }
+
+        //前8热门商品
+        $goods = GoodsModel::where(['status'=>1,'delete_time'=>0])->field('id,title,real_price,pic')
+            ->order('click','desc')->limit(8)->select();
+
+        //合作企业
+        $business_parters = explode(',',$this->getConfig('business_parters'));
+
+        $this->assign('roll_pic',$roll_pic);
+        $this->assign('information_roll_pic',$information_roll_pic);
+        $this->assign('information_qr_code_1',$information_qr_code_1);
+        $this->assign('information_qr_code_2',$information_qr_code_2);
+        $this->assign('goods_cate',$goods_cate);
+        $this->assign('hot_product',$hot_product);
+        $this->assign('information_cate',$information_cate);
+        $this->assign('goods',$goods);
+        $this->assign('business_parters',$business_parters);
+
+        return $this->fetch();
     }
 }

@@ -15,7 +15,7 @@ class GoodsCate extends Base
 
     public $cacheName = 'goodsCate';
 
-    public function index()
+    public function index(Request $request)
     {
         $categoryModel = new CategoryModel();
         $cate = $categoryModel->getList($this->cacheName,$this->cateType);
