@@ -14,4 +14,12 @@ use think\facade\Route;
 
 Route::group('/',function(){
     Route::get('/','index/Index/index');
+
+    Route::group('product',function(){
+        Route::get('/:id','index/Product/info')->name('productInfo');
+
+    });
+    Route::group('information',function(){
+        Route::get('/:id','index/Information/info')->name('informationInfo');
+    });
 });

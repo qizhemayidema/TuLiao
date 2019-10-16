@@ -1,0 +1,86 @@
+{extend name="base/base"}
+
+{block name="title"}
+{$article.title} - 产品
+{/block}
+
+{block name="body"}
+<div class="w1200 oh">
+    <div class="fl red fz16 hot_name">热点产品：</div>
+    <div class="fl oh hot_list">
+        {foreach $hot_article as $key => $value}
+        <a href="{:url('productInfo',['id'=>$value.id])}" class="fz16 c6">{$value.title}</a>
+        {/foreach}
+    </div>
+</div>
+
+<div class="w1200">
+    <div class="index_bt oh">
+        <h3 class="index_bt_h3">产品</h3>
+    </div>
+    <div class="oh mb30">
+        <div class="w900 fl k1">
+            <div class="kuang_title">
+                <h3 class="fz16 c3 fl position">您的位置：<a href="{:url('/')}" class="c3">首页</a> &gt; <a href="" class="c3">产品</a> &gt; <a href="" class="red">{$article.title}</a></h3>
+                <a href="" class="k_more fz14 c3"></a>
+                <p></p>
+            </div>
+            <div class="n_info_title tac">{$article.title}</div>
+            <div class="info fz16 lh30 c3">
+                {$article.content|raw}
+                   </div>
+        </div>
+        <div class="fr w280">
+
+            <div class="info_title">
+                <h3 class="fz20 lh20 cf">推荐产品</h3>
+            </div>
+            <div class="k1 mb10 tj_box">
+                {foreach $hot_article as $key => $value}
+                <div class="tj_list">
+                    <a href="{:url('productInfo',['id'=>$value.id])}">
+                        <img src="{$value.pic}" alt="">
+                    </a>
+                </div>
+                {/foreach}
+                <div class="tj_list">
+                    <a href="">
+                        <img src="images/a_07.jpg" alt="">
+                    </a>
+                </div>
+                <div class="tj_list">
+                    <a href="">
+                        <img src="images/a_07.jpg" alt="">
+                    </a>
+                </div>
+                <div class="tj_list">
+                    <a href="">
+                        <img src="images/a_07.jpg" alt="">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  -->
+    <div class="index_bt oh">
+        <h3 class="index_bt_h3">合作企业</h3>
+    </div>
+    <!-- 合作伙伴 -->
+    <div class="k1 mb20">
+        <div class="huoban_box oh">
+            <!-- 28条 -->
+            {foreach $business_parters as $key => $value}
+            {if $value}
+            <div class="huoban_list fl k1 tac">
+                <span></span>
+                <a href="">
+                    <img src="{$value}" alt="">
+                </a>
+            </div>
+            {/if}
+            {/foreach}
+            <!--  -->
+        </div>
+    </div>
+</div>
+{/block}

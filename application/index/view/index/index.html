@@ -119,7 +119,7 @@
                         <div class="p13">
                             {foreach $value.article as $key => $value}
                             {if $key == 0}
-                            <a href="" class="k_title oh">
+                            <a href="{:url('informationInfo',['id'=>$value.id])}" class="k_title oh">
                                 <img src="{$value.pic}" alt="" class="k_img">
                                 <div class="k_info oh">
                                     <h3 class="fz16">{$value.title}</h3>
@@ -127,7 +127,7 @@
                                 </div>
                             </a>
                             {else}
-                            <a href="" class="k_list">{$value.title}</a>
+                            <a href="{:url('informationInfo',['id'=>$value.id])}" class="k_list">{$value.title}</a>
                             {/if}
                             {/foreach}
                         </div>
@@ -148,7 +148,7 @@
             <div class="zanhui_box">
                 {if $key == 0}
                     {foreach $value.article as $key => $value}
-                <a href="" class="zanhui_list">
+                <a href="{:url('informationInfo',['id'=>$value.id])}" class="zanhui_list">
                     <img src="{$value.pic}" alt="">
                     <p class="tac">2{$value.title}</p>
                 </a>

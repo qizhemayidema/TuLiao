@@ -37,7 +37,7 @@
             <a href="" class="c6 fz18 nav_a h50 lh50 tac br1 fl">产品</a>
             <div class="a_list fl" style="width: 270px;">
                 {foreach $top_product as $key => $value}
-                <a href="">{$value.title}</a>
+                <a href="{:url('productInfo',['id'=>$value.id])}">{$value.title}</a>
                 {/foreach}
             </div>
         </div>

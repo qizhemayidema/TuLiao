@@ -43,9 +43,7 @@ class Category extends Model
                     //小于三级
                     $v['children'] = $this->getMoreList($categorys,$v['id'],$l+1);
                 }
-
                 $list[] = $v;
-
             }
         }
         return $list;
