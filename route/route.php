@@ -20,6 +20,12 @@ Route::group('/',function(){
 
     });
     Route::group('information',function(){
+        Route::get('/category/:id','index/Information/category')->name('informationCate');
         Route::get('/:id','index/Information/info')->name('informationInfo');
+    });
+
+    Route::group('goods',function(){
+        Route::get('/category/[:one_cate]/[:two_cate]/[:order]','index/Goods/category')->name('goodsCate');
+        Route::get('/:id','index/Goods/info')->name('goodsInfo');
     });
 });

@@ -21,4 +21,16 @@ class Article extends Model
         $this->where(['id'=>$article_id])->update(['status'=>$new_status]);
 
     }
+
+    /**
+     * 符合正常查看所需的条件
+     * @return \think\db\Query
+     */
+    public function allowData()
+    {
+        return $this->where([
+            'delete_time' => 0,
+            'status'    => 1,
+        ]);
+    }
 }

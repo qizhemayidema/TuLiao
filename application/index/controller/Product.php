@@ -23,6 +23,7 @@ class Product extends Base
 
         //详情
         $article = Article::find($request->param('id'));
+        if ($article) Article::where(['id'=>$request->param('id')])->setInc('click');
 
         $this->assign('hot_article',$hot_article);
 

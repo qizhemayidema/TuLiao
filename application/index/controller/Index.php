@@ -35,7 +35,7 @@ class Index extends Base
 
         //热门产品
         $hot_product = Article::where(['type'=>1,'status'=>1,'delete_time'=>0])->order('click','desc')
-            ->limit(10)->field('id','title')->select();
+            ->limit(10)->field('id,title')->select();
 
 
         //资讯排行前五的文章取出五个

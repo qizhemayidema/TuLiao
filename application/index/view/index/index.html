@@ -23,15 +23,15 @@
         <div class="i_class_list" id="goods_cate_list">
             {foreach $goods_cate as $key => $value}
             <div>
-                <a href="" class="class_top_name oh bb1">
+                <a href="{:url('goodsCate',['one_cate'=>$value.id])}" class="class_top_name oh bb1">
                     <h3 class="oh fl red fz16">{$value.name}</h3>
                     <span class="fz14 c9 fr">></span>
                 </a>
                 <div class="p0_15 oh i_class_a">
                     <!-- 限制6条 -->
                     {if isset($value.children)}
-                    {foreach $value.children as $key => $value}
-                    <a href="">{$value.name}</a>
+                    {foreach $value.children as $key => $value1}
+                    <a href="{:url('goodsCate',['one_cate'=>$value.id,'two_cate'=>$value1.id])}">{$value1.name}</a>
                     {/foreach}
                     {/if}
                 </div>
@@ -56,7 +56,7 @@
     <div class="fl red fz16 hot_name">热点产品：</div>
     <div class="fl oh hot_list">
         {foreach $hot_product as $key => $value}
-        <a href="" class="fz16 c6">{$value.title}</a>
+        <a href="{:url('productInfo',['id'=>$value.id])}" class="fz16 c6">{$value.title}</a>
         {/foreach}
     </div>
 </div>
@@ -65,7 +65,7 @@
         <h3 class="index_bt_h3">资 讯</h3>
         <div class="index_a_box">
             {foreach $top_information as $key => $value}
-            <a href="" class="fz16 cf tac">{$value.name}</a>
+            <a href="{:url('informationCate',['id'=>$value.id])}" class="fz16 cf tac">{$value.name}</a>
             {/foreach}
 
         </div>
@@ -112,7 +112,7 @@
                     <div class="kuang mb10 ml10 fl">
                         <div class="kuang_title">
                             <h3 class="fz18 c3 fl">{$value.name}</h3>
-                            <a href="" class="k_more fz14 c3">+更多</a>
+                            <a href="{:url('informationCate',['id'=>$value.id])}" class="k_more fz14 c3">+更多</a>
                             <p></p>
                         </div>
                         <!--  -->
@@ -141,7 +141,7 @@
         {if $key != 0} <?php break; ?> {/if}
         <div class="kuang_title">
             <h3 class="fz18 c3 fl">{$value.name}</h3>
-            <a href="" class="k_more fz14 c3">+更多</a>
+            <a href="{:url('informationCate',['id'=>$value.id])}" class="k_more fz14 c3">+更多</a>
             <p></p>
         </div>
         <div class="oh">
@@ -150,7 +150,7 @@
                     {foreach $value.article as $key => $value}
                 <a href="{:url('informationInfo',['id'=>$value.id])}" class="zanhui_list">
                     <img src="{$value.pic}" alt="">
-                    <p class="tac">2{$value.title}</p>
+                    <p class="tac">{$value.title}</p>
                 </a>
                     {/foreach}
                 {/if}
@@ -272,7 +272,7 @@
             <div class="oh">
                 {foreach $goods as $key => $value}
                 <div class="fl shop_list">
-                    <a href="">
+                    <a href="{:url('goodsInfo',['id'=>$value.id])}">
                         <img src="{$value.pic}" alt="">
                         <div class="shop_price oh">
                             <div class="fl red fz20 lh40">￥{$value.real_price}</div>

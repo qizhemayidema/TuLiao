@@ -45,10 +45,11 @@
             <a href="" class="c6 fz18 nav_a h50 lh50 tac br1 fl">资讯</a>
             <div class="a_list fl" style="width: 270px;">
                 {foreach $top_information as $key => $value}
-                <a href="">{$value.name}</a>
+                <a href="{:url('informationCate',['id'=>$value.id])}">{$value.name}</a>
                 {/foreach}
             </div>
         </div>
+
         <div class="nav_list fl oh">
             <a href="" class="c6 fz18 nav_a h50 lh50 tac br1 fl">社区</a>
             <div class="a_list fl" style="width: 180px;">
@@ -66,7 +67,7 @@
             </div>
         </div>
         <div class="nav_list fl tac">
-            <a href="" class="red fz18 nav_a h50 lh50">商城</a>
+            <a href="{:url('goodsCate')}" class="red fz18 nav_a h50 lh50">商城</a>
         </div>
     </div>
 </div>

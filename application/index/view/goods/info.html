@@ -1,0 +1,163 @@
+{extend name="base/base"}
+
+{block name="title"}
+{$goods.title}
+{/block}
+
+{block name="extends_source"}
+<link href="__STATIC__/css/shop.css" rel="stylesheet" type="text/css">
+
+<script src="__STATIC__/js/shop.js"></script>
+{/block}
+
+{block name="body"}
+<!--  -->
+
+<div class="w1200 ">
+    <div class="index_bt oh">
+        <h3 class="index_bt_h3">商城</h3>
+    </div>
+    <div class="oh w1200">
+        {include file="common/left_goods_cate"}
+        <!--  -->
+        <div class="w924 fr k1">
+            <div class="kuang_title ">
+                <h3 class="fz16 c3 fl position oh1" style="width: 50%;">您的位置：<a href="{:url('/')}" class="c3">首页</a> &gt; <a href="{:url('goodsCate')}" class="c3">商城</a> &gt; <a href="{:url('goodsCate',['one_cate'=>$one_cate.id])}" class="c3">{$one_cate.name}</a>&gt; <a href="" class="red">{$two_cate.name}</a></h3>
+                <p></p>
+            </div>
+            <div class="p25 ">
+                <div class="oh mb20">
+                    <div id="tFocus">
+                        <div class="prev" id="prev"></div>
+                        <div class="next" id="next"></div>
+                        <div class="k1">
+                            <ul id="tFocus-pic">
+                                {foreach :explode(',',$goods.roll_pic) as $key => $value}
+                                <li><a href="#"><img src="{$value}" /></a></li>
+                                {/foreach}
+                            </ul>
+                        </div>
+                        <div id="tFocusBtn">
+                            <a href="javascript:void(0);" id="tFocus-leftbtn">上一张</a>
+                            <div id="tFocus-btn">
+                                <ul>
+                                    {foreach :explode(',',$goods.roll_pic) as $key => $value}
+                                    <li {if $key == 0} class="active" {/if}><img src="{$value}" width="56" height="56" /></li>
+                                    {/foreach}
+                                </ul>
+                            </div>
+                            <a href="javascript:void(0);" id="tFocus-rightbtn">下一张</a>
+                        </div>
+                    </div>
+                    <div class="w425 fr">
+                        <div class="shop_str">
+                            <h3 class="shop_str_name mb10 fz18">{$goods.title}</h3>
+                            <div class="fz16 c6 lh30">{$goods.desc}</div>
+                            <div class="fz16 c6 lh30">
+                                价格：<span class="red">¥{$goods.real_price}</span> <br>
+                                原价：<span style="text-decoration:line-through;">¥{$goods.price}</span><br>
+                                上架时间：{$goods.online_time|date="Y年m月d日"}
+                            </div>
+                            <div class="shop_str_num oh mb20">
+                                <div class="fz16 c6 lh30 fl">数量：</div>
+                                <div class="fl oh mr5">
+                                    <div class="fl k1 mr5">
+                                        <input type="text" name="shop_num" class="shop_num" readonly="" value="1">
+                                    </div>
+                                    <div class="fl op_btns">
+                                        <div class="icon-9 fz12 k1" style="margin-bottom: 2px;" onclick="getNum('add')"></div>
+                                        <div class="icon-13 fz12 k1" onclick="getNum()"></div>
+                                    </div>
+                                    <div></div>
+                                </div>
+                                <div class="fz16 c6 lh30 fl">件</div>
+                            </div>
+                            <div class="oh shop_btn_box">
+                                <button type="button" class="red fz16" style="background: #ffeded;">立即购买</button>
+                                <button type="button" class="cf fz16" style="background: #ff0036;" onclick="addShopping('{$goods.id}')"><span class="icon--"></span>加入购物车</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="k1">
+                    <div class="f1_tab_title">
+                        <p class="active">商品详情</p>
+                        <!--<p class="">评价详情</p>-->
+                        <!--<p class="">交易记录</p>-->
+                    </div>
+                    <!-- 商品详情 -->
+                    <div class="shop_hook p25">
+                        {$goods.content|raw}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mb30"></div>
+<!--&lt;!&ndash; 加载中 &ndash;&gt;-->
+<!--<div class="load_box">-->
+    <!--<img src="__STATIC__/images/load.gif" alt="">加载中...-->
+<!--</div>-->
+{/block}
+
+{block name="js"}
+<script>
+    //开启加载层
+    function openload() {
+        $(".load_box").fadeIn(500);
+    };
+    //关闭加载层
+    function closeload() {
+        $(".load_box").fadeOut(500);
+    };
+    //加载完成关闭
+    $(window).load(function() {
+        console.log('111')
+        closeload();
+    });
+    addLoadEvent(Focus());
+    $(".shop_hook").eq(0).show();
+    $(".f1_tab_title p").click(function(event) {
+        var _index = $(".f1_tab_title p").index(this);
+        $(".f1_tab_title p").removeClass('active');
+        $(this).addClass('active');
+        $(".shop_hook").hide();
+        $(".shop_hook").eq(_index).show();
+    });
+
+    function getNum(str) { //购物车加减
+        var _val = Number($(".shop_num").val());
+        if (str) { //+
+            $(".shop_num").val(_val + 1);
+        } else { //-
+            if (_val <= 1) {
+                $(".shop_num").val(1);
+            } else {
+                $(".shop_num").val(_val - 1);
+            }
+        }
+    }
+
+    var addShopping = function(goods_id)
+    {
+        var num = $('input[name=shop_num]').val()
+        console.log(num)
+        $.ajax({
+            url:"{:url('index/Goods/addShopping')}",
+            type:'post',
+            dataType:'json',
+            data:{
+                goods_id:goods_id,
+                num:num,
+
+            },
+            success:function(data){
+                layer.msg(data.msg)
+            }
+        })
+    }
+</script>
+
+{/block}

@@ -6,3 +6,49 @@
 <script src="__STATIC__/js/jquery-1.7.2.min.js"></script>
 <script src="__STATIC__/js/slick.js"></script>
 <script src="__STATIC__/js/layer/layer.js"></script>
+<style>
+    ul.pagination {
+        display: inline-block;
+        padding: 0;
+        margin: 0;
+    }
+
+    .pagination a {
+        text-decoration: none;
+        margin-right: 0px !important;
+    }
+
+    ul.pagination li {
+        display: inline;
+    }
+
+    .disabled, .pagination .active, .pagination li a {
+        color: black;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+        transition: background-color .3s;
+        border: 1px solid #ddd;
+        margin: 0 4px;
+    }
+
+    .pagination .active {
+        background-color: #0397d6;
+        color: white;
+        border: 1px solid #0397d6;
+    }
+
+    .disabled {
+        background-color: rgba(236, 236, 236, 0.78);
+    }
+
+    ul.pagination a.active {
+        background-color: #4CAF50;
+        color: white;
+        border: 1px solid #4CAF50;
+    }
+
+    ul.pagination li a:hover:not(.active) {
+        background-color: #ddd;
+    }
+</style>

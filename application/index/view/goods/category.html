@@ -1,0 +1,127 @@
+{extend name="base/base"}
+
+{block name="title"}
+商城
+{/block}
+
+{block name="body"}
+<!--  -->
+
+<div class="w1200 ">
+    <div class="index_bt oh">
+        <h3 class="index_bt_h3">商城</h3>
+    </div>
+    <div class="oh w1200">
+        {include file="common/left_goods_cate"}
+        <!--  -->
+        <div class="w924 fr k1">
+            <div class="kuang_title">
+                <h3 class="fz16 c3 fl position oh1"  style="width: 50%;">您的位置：<a href="" class="c3">首页</a> &gt; <a href="{:url('goodsCate')}" class="c3">商城</a> &gt; <a href="{:url('goodsCate',['one_cate'=>$one_cate.id])}" class="red">{$one_cate.name}</a></h3>
+                <p></p>
+                <div class="sorting_box oh fr">
+                    <div onclick="sortChange('{:url('goodsCate',['one_cate'=>$one_cate.id,'two_cate'=>$two_cate.id,'order'=>($order_price_num ? 0:1).'_'.$order_price_time_num])}')" name="order_online_time" class="sorting_list oh fr {if $order_online_time == 'asc'} active {/if}">
+                        <div class="fz12 c6 fl">上架时间</div>
+                        <span class="icon-10 fl"></span>
+                    </div>
+
+                    <div onclick="sortChange('{:url('goodsCate',['one_cate'=>$one_cate.id,'two_cate'=>$two_cate.id,'order'=>$order_price_num.'_'.($order_price_time_num ? 0 : 1)])}')" name="order_price" data-value="{if $order_price == 'desc'}1{else}0{/if}" class="sorting_list oh fr {if $order_price == 'asc'} active {/if}">
+                        <div class="fz12 c6 fl ">价格</div>
+                        <span class="icon-10 fl"></span>
+                    </div>
+                    <!--<div class="sorting_list oh fr">-->
+                        <!--<div class="fz12 c6 fl">销量</div>-->
+                        <!--<span class="icon-10 fl"></span>-->
+                    <!--</div>-->
+
+                </div>
+            </div>
+            <div class="shop_class oh">
+                {foreach $goods_cate as $key => $value1}
+                    {if $value1.id == $one_cate.id}
+                        {foreach $value1.children as $key => $value2}
+                        <a href="{:url('goodsCate',['one_cate'=>$value1.id,'two_cate'=>$value2.id])}" class="fl c6" {if $two_cate.id == $value2.id} style="color: red;" {/if}>{$value2.name}<span class="c9">({$value2.data_sum})</span></a>
+                        {/foreach}
+                        <?php break;?>
+                    {/if}
+                {/foreach}
+
+            </div>
+            <div class="shop">
+
+                <div class="oh">
+                    <!-- 16条 -->
+                    {foreach $goods_list as $key => $value}
+                    <div class="fl shop_list">
+                        <a href="{:url('goodsInfo',['id'=>$value.id])}">
+                            <img src="{$value.pic}" alt="">
+                            <div class="shop_price oh">
+                                <div class="fl red fz20 lh40">￥{$value.real_price}</div>
+                                <div class="fr red fz20 lh40"><span class="icon-4"></span></div>
+                            </div>
+                            <div class="shop_js fz14 c6">{$value.title}</div>
+                        </a>
+                    </div>
+                    {/foreach}
+                </div>
+                <!-- 分页 -->
+                <div style="text-align: center;margin-top: 15px;">
+                    {$goods_list->render()|raw}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mb30"></div>
+<!--&lt;!&ndash; 加载中 &ndash;&gt;-->
+<!--<div class="load_box">-->
+<!--<img src="__STATIC__/images/load.gif" alt="">加载中...-->
+<!--</div>-->
+{/block}
+
+{block name="js"}
+<script>
+
+    //开启加载层
+    function openload() {
+        $(".load_box").fadeIn(500);
+    };
+    //关闭加载层
+    function closeload() {
+        $(".load_box").fadeOut(500);
+    };
+    //加载完成关闭
+    $(window).load(function() {
+        closeload();
+    });
+    // 排序切换
+    function sortChange(url) {
+
+        window.location.href = url
+        if ($(this).hasClass('active')) {
+            $(this).removeClass('active');
+        } else {
+            $(this).addClass('active');
+        }
+    }
+
+
+    var addShopping = function(goods_id)
+    {
+        var num = $('input[name=shop_num]').val()
+        console.log(num)
+        $.ajax({
+            url:"{:url('index/Goods/addShopping')}",
+            type:'post',
+            dataType:'json',
+            data:{
+                goods_id:goods_id,
+                num:num,
+            },
+            success:function(data){
+                layer.msg(data.msg)
+            }
+        })
+    }
+</script>
+
+{/block}

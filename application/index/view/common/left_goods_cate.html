@@ -1,0 +1,24 @@
+<div class="i_class_box bgf fl">
+    <div class="i_class_title tac cf fz16">
+        商品分类
+        <span class="icon-13"></span>
+    </div>
+    <div class="i_class_list">
+        {foreach $goods_cate as $key => $value}
+        <div>
+            <a href="{:url('goodsCate',['one_cate'=>$value.id])}" class="class_top_name oh bb1">
+                <h3 class="oh fl red fz16">{$value.name}</h3>
+                <span class="fz14 c9 fr">></span>
+            </a>
+            <div class="p0_15 oh i_class_a">
+                <!-- 限制6条 -->
+                {if isset($value.children)}
+                {foreach $value.children as $key => $value1}
+                <a href="{:url('goodsCate',['one_cate'=>$value.id,'two_cate'=>$value1.id])}">{$value1.name}</a>
+                {/foreach}
+                {/if}
+            </div>
+        </div>
+        {/foreach}
+    </div>
+</div>

@@ -20,4 +20,13 @@ class Goods extends Model
 
         $this->where(['id'=>$goods_id])->update(['status'=>$new_status]);
     }
+
+    public function allowData()
+    {
+        return $this->where([
+            'delete_time'   => 0,
+            'status'        => 1,
+        ]);
+
+    }
 }
