@@ -49,7 +49,7 @@ class Base extends Controller
 
             $this->assign('hot_line',$this->getConfig('hotLine'));
 
-            $this->assign('address',$this->getConfig('address'));
+            $this->assign('base_address',$this->getConfig('address'));
 
             $this->assign('phone',$this->getConfig('phone'));
 

@@ -38,54 +38,38 @@
                 </tr>
                 </thead>
                 <tbody class="next-table-body tac fz12">
+                {foreach $address as $key => $value}
                 <tr class="next-table-row first" role="row">
                     <td type="body" class="next-table-cell first">
-                        <div class="next-table-cell-wrapper">朱佳鹏</div>
+                        <div class="next-table-cell-wrapper">{$value.user_name}</div>
                     </td>
                     <td type="body" class="next-table-cell">
-                        <div class="next-table-cell-wrapper"><span>北京 北京市 昌平区 北七家镇 </span></div>
+                        <div class="next-table-cell-wrapper"><span>{$value.province} {$value.city} {$value.area}</span></div>
                     </td>
                     <td type="body" class="next-table-cell">
-                        <div class="next-table-cell-wrapper">平西府村388号家合超市</div>
+                        <div class="next-table-cell-wrapper">{$value.address}</div>
                     </td>
                     <td type="body" class="next-table-cell">
-                        <div class="next-table-cell-wrapper"><span>13*******61<br></span></div>
+                        <div class="next-table-cell-wrapper"><span>{$value.phone}<br></span></div>
                     </td>
                     <td type="body" class="next-table-cell">
                         <div class="next-table-cell-wrapper">
-                            <div class="tAction "><a class="t-change" href="">修改</a><span class="t-line">|</span><span class="t-delete">删除</span></div>
-                        </div>
-                    </td>
-                    <td type="body" class="next-table-cell last">
-                        <div class="next-table-cell-wrapper ">
-                            <div class="tac"><span class="t-default">默认地址</span></div>
-                        </div>
-                    </td>
-                </tr>
-                <tr class="next-table-row first" role="row">
-                    <td type="body" class="next-table-cell first">
-                        <div class="next-table-cell-wrapper">朱佳鹏</div>
-                    </td>
-                    <td type="body" class="next-table-cell">
-                        <div class="next-table-cell-wrapper"><span>北京 北京市 昌平区 北七家镇 </span></div>
-                    </td>
-                    <td type="body" class="next-table-cell">
-                        <div class="next-table-cell-wrapper">平西府村388号家合超市</div>
-                    </td>
-                    <td type="body" class="next-table-cell">
-                        <div class="next-table-cell-wrapper"><span>13*******61<br></span></div>
-                    </td>
-                    <td type="body" class="next-table-cell">
-                        <div class="next-table-cell-wrapper">
-                            <div class="tAction "><a class="t-change" href="">修改</a><span class="t-line">|</span><span class="t-delete">删除</span></div>
+                            <div class="tAction ">
+                                <a class="t-change" href="{:url('index.my.addressEdit',['id'=>$value.id])}">修改</a>
+                                <span class="t-line">|</span>
+                                <a class="t-change" onclick="addressRemove(this,'{:url('index/My/addressDelete',['id'=>$value.id])}')" href="javascript:void(0);">删除</a>
+                            </div>
                         </div>
                     </td>
                     <td type="body" class="next-table-cell last">
                         <div class="next-table-cell-wrapper">
-                            <div><span class="t-setDefault">设为默认</span></div>
+                            <a href="javascript:void(0);">
+                                <div class="tac" onclick="addressDefault('{:url('index/My/addressDefault',['id'=>$value.id])}')"><span {if $value.is_default == 1}  class="t-default" {/if}>默认地址</span></div>
+                            </a>
                         </div>
                     </td>
                 </tr>
+                {/foreach}
                 </tbody>
             </table>
         </div>
@@ -96,21 +80,36 @@
 {block name="js"}
 <script>
 
-    function removeBoth(_this,user_id)
+    function addressRemove(_this,url)
     {
         $.ajax({
-            url:"{:url('index/My/focusUserOrRemove')}",
+            url:url,
             type:'post',
             dataType:'json',
-            data:{
-                user_id : user_id,
-                type : 2,
-            },
+            data:{},
             success:function(data){
-                $(_this).parents('.both_box').remove();
                 layer.msg(data.msg)
+                $(_this).parents('tr').remove();
+                // layer.msg(data.msg)
             }
         })
+
+        return false;
+    }
+
+    function addressDefault(url)
+    {
+        $.ajax({
+            url:url,
+            type:'post',
+            dataType:'json',
+            data:{},
+            success:function(data){
+                window.location.reload()
+            }
+        })
+
+        return false;
     }
 </script>
 {/block}

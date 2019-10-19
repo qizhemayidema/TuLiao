@@ -34,8 +34,11 @@ Route::group('/',function(){
         Route::get('/fans','index/My/fans')->name('index.my.fans');
         Route::get('/order','index/My/order')->name('index.my.order');
         Route::get('/shopping','index/My/shopping')->name('index.my.shopping');
+
         Route::get('/address/create','index/My/addressCreate')->name('index.my.addressCreate');
+        Route::get('/address/edit/:id','index/My/addressEdit')->name('index.my.addressEdit');
         Route::get('/address','index/My/address')->name('index.my.address');
+
         Route::get('/revisePassword','index/My/revisePassword')->name('index.my.revisePassword');
         Route::get('/article/create','index/My/articleCreate')->name('index.my.articleCreate');
         Route::get('/article','index/My/article')->name('index.my.article');

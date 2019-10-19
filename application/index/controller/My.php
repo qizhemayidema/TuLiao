@@ -2,12 +2,19 @@
 
 namespace app\index\controller;
 
+use app\common\controller\Upload;
+use app\common\model\Article;
 use app\common\model\BothStatus;
 use app\common\model\User as UserModel;
 use app\common\model\BothStatus as BothStatusModel;
 use app\common\model\Order as OrderModel;
 use app\common\model\Shopping as ShoppingModel;
 use app\common\model\UserAddress as AddressModel;
+use app\common\model\Category as CateModel;
+use app\common\typeCode\Forum as CommonForum;
+use app\common\typeCode\ForumCate;
+use think\Exception;
+use think\exception\ErrorException;
 use think\Request;
 use think\Validate;
 use app\common\controller\Upload as CommonUpload;
@@ -25,8 +32,6 @@ class My extends Base
         $this->user = $this->userInfo;
 
     }
-
-
 
 
     public function index(Request $request)
@@ -127,6 +132,10 @@ class My extends Base
     {
         $this->assign('pageType','address');
 
+        $address = (new AddressModel())->where(['user_id'=>$this->user->id])->order('id','desc')
+            ->select();
+
+        $this->assign('address',$address);
 
         return $this->fetch();
     }
@@ -164,7 +173,12 @@ class My extends Base
             return json(['code'=>0,'msg'=>$validate->getError()]);
         }
 
-        (new AddressModel())->insert([
+        $address = new AddressModel();
+        $count = $address->where(['user_id'=>$this->user->id])->count();
+        if($count >= 5) return json(['code'=>0,'msg'=>'地址最多只能添加5个']);
+
+
+        $address->insert([
             'province'  => $post['province'],
             'city'      => $post['city'],
             'area'      => $post['area'],
@@ -175,6 +189,211 @@ class My extends Base
         ]);
 
         return json(['code'=>1,'msg'=>'保存成功']);
+    }
+
+    //修改地址
+    public function addressEdit(Request $request)
+    {
+        $address_id = $request->param('id');
+        $address = (new AddressModel())->where(['user_id'=>$this->user->id,'id'=>$address_id])
+            ->find();
+        if (!$address) throw new Exception('',404);
+
+        $this->assign('address',$address);
+
+        return $this->fetch();
+    }
+
+    public function addressUpdate(Request $request)
+    {
+        $post = $request->post();
+        $rules = [
+            'id'        => 'require',
+            'province'  => 'require',
+            'city'  => 'require',
+            'area'  => 'require',
+            'address'  => 'require|max:128',
+            'user_name'  => 'require|max:32',
+            'phone'  => 'require|max:11',
+        ];
+
+        $messages = [
+            'id.require'        => '非法请求',
+            'province.require'  => '省必须选择',
+            'city.require'      => '市必须选择',
+            'area.require'      => '区必须选择',
+            'address.require'   => '详细地址必须填写',
+            'address.max'       => '详细地址最大长度为128',
+            'user_name.require' => '姓名必须填写',
+            'phone.require'     => '电话必须填写'
+        ];
+
+        $validate = new Validate($rules,$messages);
+        if (!$validate->check($post)){
+            return json(['code'=>0,'msg'=>$validate->getError()]);
+        }
+
+        $data = [
+            'province'  => $post['province'],
+            'city'      => $post['city'],
+            'area'      => $post['area'],
+            'address'   => $post['address'],
+            'user_name' => $post['user_name'],
+            'phone'     => $post['phone'],
+            'user_id'   => $this->user->id,
+        ];
+
+        (new AddressModel())->where(['id'=>$post['id'],'user_id'=>$this->user->id])
+            ->update($data);
+
+        return json(['code'=>1,'msg'=>'修改成功']);
+
+    }
+
+    //删除地址
+    public function addressDelete(Request $request)
+    {
+        $id = $request->param('id');
+
+        (new AddressModel())->where(['id'=>$id,'user_id'=>$this->user->id])->delete();
+
+        return json(['code'=>1,'msg'=>'删除成功']);
+    }
+
+    public function addressDefault(Request $request)
+    {
+        $id = $request->param('id');
+
+        $address = new AddressModel();
+
+        $address->where(['user_id'=>$this->user->id])
+            ->update(['is_default'=>0]);
+
+        $address->where(['id'=>$id,'user_id'=>$this->user->id])
+            ->update(['is_default'=>1]);
+
+        return json(['code'=>1,'msg'=>'success']);
+
+    }
+
+
+
+    public function revisePassword()
+    {
+        $this->assign('pageType','revisePassword');
+
+        return $this->fetch();
+    }
+
+    public function passwordUpdate(Request $request)
+    {
+        $post = $request->post();
+        $rules = [
+            'old_password'  => 'require',
+            'new_password'  => 'require',
+            'repeat_password' => 'require',
+        ];
+
+        $message = [
+            'old_password.require'  => '当前密码必须填写',
+            'new_password.require'  => '新密码必须填写',
+            'repeat_password.require' => '确认密码必须填写',
+        ];
+
+        $validate = new Validate($rules,$message);
+
+        if (!$validate->check($post)){
+            return json(['code'=>0,'msg'=>'success']);
+        }
+
+        if ($this->user->password != md5($post['old_password'])){
+            return json(['code'=>0,'msg'=>'当前密码填写不正确']);
+        }
+
+        if ($post['new_password'] != $post['repeat_password']){
+            return json(['code'=>0,'msg'=>'两次密码填写不一致']);
+        }
+
+        (new UserModel())->where(['id'=>$this->user->id])->update([
+            'password'  =>  md5($post['new_password'])
+        ]);
+
+        return json(['code'=>1,'msg'=>'修改成功']);
+    }
+
+
+    public function articleCreate()
+    {
+        $this->assign('pageType','articleCreate');
+
+        //查询社区分类
+        $forumCate = new ForumCate();
+        $cate = (new CateModel())->getList($forumCate->cacheName,$forumCate->cateType);
+
+        $this->assign('cate',$cate);
+
+        return $this->fetch();
+    }
+
+    public function articleSave(Request $request)
+    {
+        $post = $request->post();
+        $rules = [
+            'pic'   => 'require',
+            'title' => 'require|max:30',
+            'cate_id' => 'require|number',
+            'desc'  => 'require|max:300',
+            'content' => 'require',
+            'captcha'   => 'require|captcha',
+        ];
+
+        $messages = [
+            'pic.require'   => '封面图必须上传',
+            'title.require' => '标题必须上传',
+            'title.max' => '标题最大长度为30',
+            'cate_id.require' => '必须选择分类',
+            'desc.require' => '简介必须填写',
+            'desc.max' => '简介最大长度为300',
+            'content.require' => '详情必须填写',
+            'captcha.require' => '验证码必须填写',
+            'captcha.captcha' => '验证码不正确',
+        ];
+
+
+        $validate = new Validate($rules,$messages);
+
+        if (!$validate->check($post)){
+            return json(['code'=>0,'msg'=>$validate->getError()]);
+        }
+
+        $insert = [
+            'type' => (new CommonForum())->articleType,
+            'cate_id' => $post['cate_id'],
+            'author_id' => $this->user->id,
+            'title'     => $post['title'],
+            'desc'      => $post['desc'],
+            'content'   => $post['content'],
+            'pic'       => (new Upload())->uploadBase64Pic($post['pic'],'forum/')['msg'],
+            'create_time' => time(),
+        ];
+
+
+        (new Article())->insert($insert);
+
+        return json(['code'=>1,'msg'=>'发布成功']);
+    }
+
+    public function article(Request $request)
+    {
+        $type = (new \app\common\typeCode\Forum());
+        $article = (new Article())->allowData()->where(['author_id'=>$this->user->id,'type'=>$type->articleType])
+            ->paginate(10);
+
+        $this->assign('pageType','article');
+        $this->assign('article',$article);
+        $this->assign('user',$this->user);
+
+        return $this->fetch();
     }
 
 

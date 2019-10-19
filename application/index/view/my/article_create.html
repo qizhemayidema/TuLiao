@@ -1,0 +1,104 @@
+{extend name="my/common/base"}
+
+{block name="title"}发布文章 - 个人中心{/block}
+
+{block name="content"}
+<!-- 发布文章 -->
+<div class="mybox_R_one hook">
+    <div class="my_b_r_type my_b_r_type1">
+        <span class="">发布文章</span>
+    </div>
+    <div class="w100">
+        <form id="form1">
+            <div class="formlist clearfix">
+                <div class="formtit">文章封面:</div>
+                <div class="uploadfile" style="width: 170px; height: 115px;">
+                    <img id="listPic" >
+                    <input id="file" type="file" accept="image/*" class="txsc" data-name="listPic">
+                    <input type="hidden" name="listPic">
+                </div>
+                <div class="upimgtip">
+                    <p>选择本地照片，上传文章封面</p>
+                    <p>支持jpg、jpeg、gif、png、bmp格式的图片</p>
+                </div>
+            </div>
+            <div class="formlist clearfix">
+                <div class="formtit">文章标题:</div>
+                <div class="forminr"><input type="text" name="title" class="form_int"></div>
+            </div>
+            <div class="formlist clearfix">
+                <div class="formtit">文章分类:</div>
+                <div class="sel_class">
+                    <!-- <input type="text" name="username" class="form_int"> -->
+                    <select name="cate_id" id="" class="form_int">
+                        {foreach $cate as $key => $value}
+                        <option value="{$value.id}">{$value.name}</option>
+                        {/foreach}
+                    </select>
+                </div>
+            </div>
+            <div class="formlist clearfix">
+                <div class="formtit">文章简介:</div>
+                <textarea name="desc" cols="80" rows="10"></textarea>
+            </div>
+            <div class="formlist clearfix">
+                <div class="formtit">文章详情:</div>
+                <div class="oh">
+                    <div class="mb20">
+                        <textarea name="content" id="editor" placeholder=""></textarea>
+                    </div>
+                    <div class="p10 oh">
+                        <div class="fabu_yzm fz14">
+                            <span class="fabu_yzm1 fl">验证码:</span>
+                            <input class="fabu_yzm2 fl" type="" name="captcha" value="" placeholder="请输入验证码" />
+                            <img style="width: 110px;" id="captcha" class="yam_img fl" src="{:captcha_src()}" alt="">
+                            <div class="fabu_yzm3  fl fz14 c6"><a href="javascript:$('#captcha').attr('src','/captcha.html?temp='+Math.random())">看不清楚 <span>换一换</span></a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="button" value="发布" class="my_msg_Submit mb20" onclick="save()">
+        </form>
+    </div>
+</div>
+{/block}
+
+
+{block name="js"}
+<script>
+    var editor = new Simditor({
+        textarea: $('#editor'),
+        toolbar: ['title', 'bold', 'italic', 'underline', 'strikethrough', 'fontScale', 'color', 'ol', 'ul',
+            'blockquote', 'table', 'link', 'image', 'hr', 'indent', 'outdent', 'alignment'
+        ],
+        upload: {
+            url: '/index/Forum/uploadContentPic',
+            params: null,
+            fileKey: 'file_path',
+            connectionCount: 1,
+            leaveConfirm: '正在上传图片请勿关闭此页面'
+        },
+        placeholder: '',
+        imageButton: ['upload'],
+    });
+    editor.sync();
+
+    function save()
+    {
+        var formData = new FormData($('#form1')[0])
+        formData.append('pic',$('input[name=listPic]').val())
+        formData.delete('listPic')
+        $.ajax({
+            url:"{:url('index/My/articleSave')}",
+            type:'post',
+            dataType:'json',
+            data:formData,
+            contentType:false,
+            processData:false,
+            success:function(data){
+                layer.msg(data.msg)
+            }
+        })
+    }
+</script>
+{/block}

@@ -1,0 +1,57 @@
+{extend name="my/common/base"}
+
+{block name="title"}我的文章 - 个人中心{/block}
+
+
+{block name="content"}
+<!-- 我的文章 -->
+<div class="mybox_R_one hook" >
+    <div class="my_b_r_type my_b_r_type1">
+        <span class="">我的文章</span>
+    </div>
+    <div class="w100">
+        <!-- <div class="zanwu">暂无数据</div> -->
+        <div class="p30">
+            {foreach $article as $key => $value}
+            <a href="" class="tuliao_list">
+                <div class="list_avt oh mb20">
+                    <img src="{$user.avatar_url}" alt="" class="mr20">
+                    <div class=" fz18 c6 lh50 h50">{$user.nickname}</div>
+                </div>
+                <h3 class="t_title fz20 c3">{$value.title}</h3>
+                <p class="t_info fz16 c6">{$value.desc}</p>
+                <div class="oh t_time_box">
+                    <div class="time fl fz14 c9 lh30 oh">
+                        <p class="fl">{$value.create_time|date="Y-m-d H:i:s"}</p>
+                        <div class="fl oh t_icon_list">
+                            <span class="fl lh30 icon--- fz18"></span>
+                            <p class="fl">
+                                {if $value.click < 10000}
+                                {$value.click}
+                                {else}
+                                {$value.click / 10000}万
+                                {/if}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="t_icon_box fr lh30">
+                        <div class="fl oh t_icon_list">
+                            <span class="fl lh30 icon-7 fz14"></span>
+                            <p class="fl">{$value.comment_sum}</p>
+                        </div>
+                        <div class="fl oh t_icon_list">
+                            <span class="fl lh30 icon-2 fz14"></span>
+                            <p class="fl">{$value.like_sum}</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {/foreach}
+        </div>
+    </div>
+    <div>
+        <!-- 分页 -->
+        {$article->render()|raw}
+    </div>
+</div>
+{/block}

@@ -9,6 +9,8 @@
     {include file="common/source"}
     {include file="common/login_js"}
     {block name="extends_source"}{/block}
+    <link href="__STATIC__/css/simditor.css" rel="stylesheet" type="text/css">
+
     <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="__STATIC__/js/module.js"></script>
     <script type="text/javascript" src="__STATIC__/js/hotkeys.js"></script>
@@ -48,9 +50,15 @@
                     <a href="{:url('index.my.address')}">
                     <div class="mybox_L_div {if $pageType == 'address'} cur {/if}">我的地址</div>
                     </a>
+                    <a href="{:url('index.my.revisePassword')}">
                     <div class="mybox_L_div {if $pageType == 'revisePassword'} cur {/if}">修改密码</div>
+                    </a>
+                    <a href="{:url('index.my.articleCreate')}">
                     <div class="mybox_L_div {if $pageType == 'articleCreate'} cur {/if}">发布文章</div>
+                    </a>
+                    <a href="{:url('index.my.article')}">
                     <div class="mybox_L_div {if $pageType == 'article'} cur {/if}">我的文章</div>
+                    </a>
                 </div>
                 <div class="mybox_R">
                     {block name="content"}{/block}
