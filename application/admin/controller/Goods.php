@@ -210,7 +210,6 @@ class Goods extends Base
 
         $old_data = GoodsModel::where(['id' => $goods_id])->find();
 
-
         GoodsModel::where(['id'=>$goods_id])->update(['delete_time'=>time()]);
 
         Category::where(['id'=>$old_data['cate_id']])->setDec('data_sum');

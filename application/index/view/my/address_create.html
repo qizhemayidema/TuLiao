@@ -1,0 +1,77 @@
+{extend name="base/base"}
+
+{block name="extends_source"}
+<script src="__STATIC__/js/jsAddress.js"></script>
+{/block}
+
+{block name="title"}添加地址{/block}
+
+{block name="body"}
+<div class="w1200 pt20">
+    <div class="w1200">
+        <div class="mybox_H">
+            <div class="mybox_H_inr fl">个人中心</div>
+        </div>
+        <div class="w100 bgf mybox_B k1">
+            <div class="p30 fz12">
+                <form id="form1">
+                    <div class="f_box">
+                        <div class="formlist clearfix">
+                            <div class="formtit">地址信息:</div>
+                            <div class="city_list oh">
+                                <select class="province" name="province">
+                                </select>
+                                <select class="city" name="city">
+                                </select>
+                                <select class="area" name="area">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="formlist clearfix">
+                            <div class="formtit">详细地址:</div>
+                            <div class="forminr"><input type="text" name="address" class="form_int"></div>
+                        </div>
+                        <div class="formlist clearfix">
+                            <div class="formtit">姓名:</div>
+                            <div class="forminr"><input type="text" name="user_name" class="form_int"></div>
+                        </div>
+                        <div class="formlist clearfix">
+                            <div class="formtit">电话:</div>
+                            <div class="forminr"><input type="text" name="phone" class="form_int"></div>
+                        </div>
+                        <input type="button" onclick="save()" value="保存" class="my_msg_Submit">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mb30"></div>
+{/block}
+
+{block name="js"}
+<script>
+
+
+    addressInit('province', 'city', 'area', '北京', '市辖区', '东城区');
+    // addressInit('province', 'city', 'district', '安徽', '合肥市', '蜀山区');
+
+    function save()
+    {
+        var formData = new FormData($('#form1')[0])
+
+        $.ajax({
+            url:"{:url('index/My/addressSave')}",
+            type:'post',
+            dataType:'json',
+            data:formData,
+            contentType:false,
+            processData:false,
+            success:function(data){
+                layer.msg(data.msg)
+                if (data.code == 1) setTimeout(function(){ window.location.href = "{:url('index.my.address')}"},750)
+            }
+        })
+    }
+</script>
+{/block}

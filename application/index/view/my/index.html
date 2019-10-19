@@ -1,0 +1,710 @@
+{extend name="base/base"}
+
+{block name="title"}个人中心{/block}
+
+{block name="base_source"}
+<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="__STATIC__/js/module.js"></script>
+<script type="text/javascript" src="__STATIC__/js/hotkeys.js"></script>
+<script type="text/javascript" src="__STATIC__/js/uploader.js"></script>
+<script type="text/javascript" src="__STATIC__/js/simditor.js"></script>
+{/block}
+
+
+{block name="body"}
+<!--  -->
+<div id="content">
+    <div class="w1200 pt20">
+        <div class="w1200">
+            <div class="mybox_H">
+                <div class="mybox_H_inr fl">个人中心</div>
+            </div>
+            <div class="w100 bgf mybox_B k1">
+                <div class="mybox_L">
+                    <div class="mybox_L_div cur">个人信息</div>
+                    <div class="mybox_L_div">认证</div>
+                    <div class="mybox_L_div">我的关注</div>
+                    <div class="mybox_L_div">我的粉丝</div>
+                    <div class="mybox_L_div">我的订单</div>
+                    <div class="mybox_L_div">购物车</div>
+                    <div class="mybox_L_div">我的地址</div>
+                    <div class="mybox_L_div">修改密码</div>
+                    <div class="mybox_L_div">发布文章</div>
+                    <div class="mybox_L_div">我的文章</div>
+                </div>
+                <div class="mybox_R">
+                    <!-- 个人信息 -->
+                    <div class="mybox_R_one hook" style="display: block;">
+                        <div class="my_b_r_type my_b_r_type1">
+                            <span class="">个人信息</span>
+                        </div>
+                        <div class="w100">
+                            <form id="form1">
+                                <div class="formlist clearfix">
+                                    <div class="formtit">头像设置:</div>
+                                    <div class="uploadfile"><img id="tx" src="{$user_info.avatar_url}">
+                                        <input id="file" name="file" type="file" accept="image/*" class="txsc" data-name="tx">
+                                        <input type="hidden" name="tx">
+                                    </div>
+                                    <div class="upimgtip">
+                                        <p>选择本地照片，上传编辑自己的头像</p>
+                                        <p>支持jpg、jpeg、gif、png、bmp格式的图片</p>
+                                    </div>
+                                </div>
+                                <div class="formlist clearfix">
+                                    <div class="formtit">*昵称:</div>
+                                    <div class="forminr">
+                                        <input type="text" value="{$user_info.nickname}" name="nickname" class="form_int"/>
+                                    </div>
+                                </div>
+                                <input type="button" onclick="updateUserInfo()" value="保存" class="my_msg_Submit">
+                            </form>
+                        </div>
+                    </div>
+                    <!-- 认证 -->
+                    <div class="mybox_R_one hook" style="display: none;">
+                        <div class="my_b_r_type my_b_r_type1">
+                            <span class="">认证</span>
+                        </div>
+                        <div class="w100">
+                            {if $user_info.is_auth == 1}
+                            申请中
+                            {elseif $user_info.is_auth == 3}
+                            已认证
+                            {else}
+                            {if $user_info.is_auth == 2}
+                            已拒绝
+                            {/if}
+
+                            <form id="form2">
+                                <div class="formlist clearfix">
+                                    <div class="formtit">身份证正面:</div>
+                                    <div class="uploadfile" style="width: 170px; height: 115px;">
+                                        <img id="card_front" {if $user_info.id_card_front} src="{$user_info.id_card_front}" {/if}>
+                                        <input id="file" name="file" type="file" accept="image/*" class="txsc" data-name="card_front">
+                                        <input type="hidden" name="card_front">
+                                    </div>
+                                    <div class="upimgtip">
+                                        <p>选择本地照片，上传编辑自己的头像</p>
+                                        <p>支持jpg、jpeg、gif、png、bmp格式的图片</p>
+                                    </div>
+                                </div>
+                                <div class="formlist clearfix">
+                                    <div class="formtit">身份证反面:</div>
+                                    <div class="uploadfile" style="width: 170px; height: 115px;">
+                                        <img id="card_reverse" {if $user_info.id_card_reverse} src="{$user_info.id_card_reverse}" {/if}>
+                                        <input id="file" name="file" type="file" accept="image/*" class="txsc" data-name="card_reverse">
+                                        <input type="hidden" name="card_reverse">
+                                    </div>
+                                    <div class="upimgtip">
+                                        <p>选择本地照片，上传编辑自己的头像</p>
+                                        <p>支持jpg、jpeg、gif、png、bmp格式的图片</p>
+                                    </div>
+                                </div>
+                                <div class="formlist clearfix">
+                                    <div class="formtit">真实姓名:</div>
+                                    <div class="forminr"><input type="text" name="real_name" class="form_int"></div>
+                                </div>
+                                <input type="button" onclick="auth()" value="保存" class="my_msg_Submit">
+                            </form>
+
+                            {/if}
+                        </div>
+                    </div>
+                    <!-- 我的关注 -->
+                    <div class="mybox_R_one hook" style="display: none;">
+                        <div class="my_b_r_type my_b_r_type1">
+                            <span class="">我的关注</span>
+                        </div>
+                        <div class="w100">
+                            <div class="p30">
+                                {foreach $both as $key => $value}
+                                <div class="daka_list mb30 oh both_box">
+                                    <a href="" class="list_avt oh  fl">
+                                        <img src="{$value.avatar_url}" alt="" class="mr20">
+                                        <div class=" fz18 c3 lh25 h25 oh1">{$value.nickname}</div>
+                                        <!--<div class="lh25 h25 oh1 fz16 c9">EEK棒(聚醚醚酮)是具备优</div>-->
+                                    </a>
+                                    <div class="follow fr">
+                                        <button onclick="removeBoth(this,'{$value.user_id}')" type="button">取消关注</button> <!-- 已关注 -->
+                                    </div>
+                                </div>
+                                {/foreach}
+                                <div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <!-- 分页 -->
+                        </div>
+                    </div>
+                    <!-- 我的粉丝 -->
+                    <div class="mybox_R_one hook" style="display: none;">
+                        <div class="my_b_r_type my_b_r_type1">
+                            <span class="">我的粉丝</span>
+                        </div>
+                        <div class="w100">
+                            <!-- <div class="zanwu">暂无数据</div> -->
+                            <div class="p30">
+                                <a href="" class="daka_list mb30">
+                                    <div class="list_avt oh mb20">
+                                        <img src="images/a_12.jpg" alt="" class="mr20">
+                                        <div class=" fz18 c3 lh25 h25 oh1">中国氟碳涂料网</div>
+                                        <div class="lh25 h25 oh1 fz16 c9">EEK棒(聚醚醚酮)是具备优</div>
+                                    </div>
+                                </a>
+                                <a href="" class="daka_list mb30">
+                                    <div class="list_avt oh mb20">
+                                        <img src="images/a_12.jpg" alt="" class="mr20">
+                                        <div class=" fz18 c3 lh25 h25 oh1">中国氟碳涂料网</div>
+                                        <div class="lh25 h25 oh1 fz16 c9">EEK棒(聚醚醚酮)是具备优</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div>
+                            <!-- 分页 -->
+                        </div>
+                    </div>
+                    <!-- 我的订单 -->
+                    <div class="mybox_R_one hook" style="display: none;">
+                        <div class="my_b_r_type my_b_r_type1">
+                            <span class="">我的订单</span>
+                        </div>
+                        <div class="w100">
+                            <div class="table_box">
+                                <table class="table table-responsive tab_hook">
+                                    <tbody>
+                                    <tr>
+                                        <th height="31">名称</th>
+                                        <th height="31">图片</th>
+                                        <th height="31">店铺名称</th>
+                                        <th height="31">价格(元)</th>
+                                        <th height="31">数量</th>
+                                        <th height="31">运费(元)</th>
+                                        <th height="31">时间</th>
+                                    </tr>
+                                    <tr>
+                                        <td height="80"><a href="">鸽王30名</a></td>
+                                        <td height="80"><a href=""><img src="images/a_03.jpg" alt="" width="50" height="50"></a></td>
+                                        <td height="80"><a href="">江南神奇</a></td>
+                                        <td height="80" class="price"><a href="">3000</a></td>
+                                        <td height="80"><a href="">1</a></td>
+                                        <td height="80" class="freight"><a href="">300</a></td>
+                                        <td height="80"><a href="">2017-12-12 12:22:20</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td height="80"><a href="">鸽王30名</a></td>
+                                        <td height="80"><a href=""><img src="images/a_03.jpg" alt="" width="50" height="50"></a></td>
+                                        <td height="80"><a href="">江南神奇</a></td>
+                                        <td height="80" class="price"><a href="">3000</a></td>
+                                        <td height="80"><a href="">1</a></td>
+                                        <td height="80" class="freight"><a href="">300</a></td>
+                                        <td height="80"><a href="">2017-12-12 12:22:20</a></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div>
+                            <!-- 分页 -->
+                        </div>
+                    </div>
+                    <!-- 购物车 -->
+                    <div class="mybox_R_one hook" style="display: none;">
+                        <div class="my_b_r_type my_b_r_type1">
+                            <span class="">购物车</span>
+                            <div class="fr del_settlement oh">
+                                <div class="fz14 red fw9 fl mr10">合计:<span class="total">1000</span></div>
+                                <button type="button" class="btn del_car" onclick="del();">删除</button>
+                                <button type="button" class="btn settlement" onclick="settlement();">结算</button>
+                            </div>
+                        </div>
+                        <div class="w100">
+                            <div class="table_box">
+                                <table class="table table-responsive tab_hook car_box">
+                                    <tbody>
+                                    <tr>
+                                        <!--  checked="checked" -->
+                                        <th><label for="all"><input type="checkbox" id="all" class="checkbox">全选</label></th>
+                                        <th height="31">名称</th>
+                                        <th height="31">图片</th>
+                                        <th height="31">店铺名称</th>
+                                        <th height="31">价格(元)</th>
+                                        <th height="31">数量</th>
+                                        <th height="31">运费(元)</th>
+                                        <th height="31">时间</th>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" class="checkbox" data-id="0"></td>
+                                        <td height="80">鸽王30名</td>
+                                        <td height="80"><img src="images/a_03.jpg" alt="" width="50" height="50"></td>
+                                        <td height="80">江南神奇</td>
+                                        <td height="80" class="price">3000</td>
+                                        <td height="80">
+                                            <div class="oh car_num_box">
+                                                <button type="button" onclick="getNum('',this)">-</button>
+                                                <input type="text" readonly="" value="1">
+                                                <button type="button" onclick="getNum('add',this)">+</button>
+                                            </div>
+                                        </td>
+                                        <td height="80" class="freight">300</td>
+                                        <td height="80">2017-12-12 12:22:20</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" class="checkbox" data-id="1"></td>
+                                        <td height="80">鸽王30名</td>
+                                        <td height="80"><img src="images/a_03.jpg" alt="" width="50" height="50"></td>
+                                        <td height="80">江南神奇</td>
+                                        <td height="80" class="price">3001</td>
+                                        <td height="80">
+                                            <div class="oh car_num_box">
+                                                <button type="button" onclick="getNum('',this)">-</button>
+                                                <input type="text" readonly="" value="2">
+                                                <button type="button" onclick="getNum('add',this)">+</button>
+                                            </div>
+                                        </td>
+                                        <td height="80" class="freight">301</td>
+                                        <td height="80">2017-12-12 12:22:20</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 我的地址 -->
+                    <div class="mybox_R_one hook" style="display: none;">
+                        <div class="my_b_r_type my_b_r_type1">
+                            <span class="">我的地址</span>
+                            <div class="fr del_settlement oh">
+                                <button type="button" class="btn settlement"><a href="" class="cf">添加地址</a></button>
+                            </div>
+                        </div>
+                        <div class="w100">
+                            <div class="next-table">
+                                <table role="table fz12" style="width: 100%;">
+                                    <thead class="next-table-header fz12 tac">
+                                    <tr>
+                                        <th rowspan="1" type="header" class="next-table-cell next-table-header-node">
+                                            <div class="next-table-cell-wrapper">收货人</div>
+                                        </th>
+                                        <th rowspan="1" type="header" class="next-table-cell next-table-header-node">
+                                            <div class="next-table-cell-wrapper" data-spm-anchor-id="0.0.0.i0.3dda175cAtI8CC">所在地区</div>
+                                        </th>
+                                        <th rowspan="1" type="header" class="next-table-cell next-table-header-node">
+                                            <div class="next-table-cell-wrapper">详细地址</div>
+                                        </th>
+                                        <th rowspan="1" type="header" class="next-table-cell next-table-header-node">
+                                            <div class="next-table-cell-wrapper">电话/手机</div>
+                                        </th>
+                                        <th rowspan="1" type="header" class="next-table-cell next-table-header-node">
+                                            <div class="next-table-cell-wrapper">操作</div>
+                                        </th>
+                                        <th rowspan="1" type="header" class="next-table-cell next-table-header-node">
+                                            <div class="next-table-cell-wrapper"></div>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="next-table-body tac fz12">
+                                    <tr class="next-table-row first" role="row">
+                                        <td type="body" class="next-table-cell first">
+                                            <div class="next-table-cell-wrapper">朱佳鹏</div>
+                                        </td>
+                                        <td type="body" class="next-table-cell">
+                                            <div class="next-table-cell-wrapper"><span>北京 北京市 昌平区 北七家镇 </span></div>
+                                        </td>
+                                        <td type="body" class="next-table-cell">
+                                            <div class="next-table-cell-wrapper">平西府村388号家合超市</div>
+                                        </td>
+                                        <td type="body" class="next-table-cell">
+                                            <div class="next-table-cell-wrapper"><span>13*******61<br></span></div>
+                                        </td>
+                                        <td type="body" class="next-table-cell">
+                                            <div class="next-table-cell-wrapper">
+                                                <div class="tAction "><a class="t-change" href="">修改</a><span class="t-line">|</span><span class="t-delete">删除</span></div>
+                                            </div>
+                                        </td>
+                                        <td type="body" class="next-table-cell last">
+                                            <div class="next-table-cell-wrapper ">
+                                                <div class="tac"><span class="t-default">默认地址</span></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="next-table-row first" role="row">
+                                        <td type="body" class="next-table-cell first">
+                                            <div class="next-table-cell-wrapper">朱佳鹏</div>
+                                        </td>
+                                        <td type="body" class="next-table-cell">
+                                            <div class="next-table-cell-wrapper"><span>北京 北京市 昌平区 北七家镇 </span></div>
+                                        </td>
+                                        <td type="body" class="next-table-cell">
+                                            <div class="next-table-cell-wrapper">平西府村388号家合超市</div>
+                                        </td>
+                                        <td type="body" class="next-table-cell">
+                                            <div class="next-table-cell-wrapper"><span>13*******61<br></span></div>
+                                        </td>
+                                        <td type="body" class="next-table-cell">
+                                            <div class="next-table-cell-wrapper">
+                                                <div class="tAction "><a class="t-change" href="">修改</a><span class="t-line">|</span><span class="t-delete">删除</span></div>
+                                            </div>
+                                        </td>
+                                        <td type="body" class="next-table-cell last">
+                                            <div class="next-table-cell-wrapper">
+                                                <div><span class="t-setDefault">设为默认</span></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 修改密码 -->
+                    <div class="mybox_R_one hook" style="display: none;">
+                        <div class="my_b_r_type my_b_r_type1">
+                            <span class="">修改密码</span>
+                        </div>
+                        <form id="form3">
+                            <div class="formlist clearfix">
+                                <div class="formtit">当前密码:</div>
+                                <div class="forminr"><input type="password" name="oldpwd" class="form_int"></div>
+                            </div>
+                            <div class="formlist clearfix">
+                                <div class="formtit">新密码:</div>
+                                <div class="forminr">
+                                    <input type="password" name="newpwd" class="form_int">
+                                    <!-- <span class="showkg showkg1"></span> -->
+                                </div>
+                            </div>
+                            <div class="formlist clearfix">
+                                <div class="formtit">确认密码:</div>
+                                <div class="forminr"><input type="password" name="newpwd1" class="form_int"></div>
+                            </div> <input type="button" value="保存" class="my_msg_Submit">
+                        </form>
+                    </div>
+                    <!-- 发布文章 -->
+                    <div class="mybox_R_one hook" style="display: none;">
+                        <div class="my_b_r_type my_b_r_type1">
+                            <span class="">发布文章</span>
+                        </div>
+                        <div class="w100">
+                            <form id="form4">
+                                <div class="formlist clearfix">
+                                    <div class="formtit">文章封面:</div>
+                                    <div class="uploadfile" style="width: 170px; height: 115px;"><img id="listPic" src="images/20150828225753jJ4Fc.jpeg">
+                                        <input id="file" type="file" accept="image/*" class="txsc" data-name="listPic">
+                                        <input type="hidden" name="listPic">
+                                    </div>
+                                    <div class="upimgtip">
+                                        <p>选择本地照片，上传文章封面</p>
+                                        <p>支持jpg、jpeg、gif、png、bmp格式的图片</p>
+                                    </div>
+                                </div>
+                                <div class="formlist clearfix">
+                                    <div class="formtit">文章标题:</div>
+                                    <div class="forminr"><input type="text" name="username" class="form_int"></div>
+                                </div>
+                                <div class="formlist clearfix">
+                                    <div class="formtit">文章分类:</div>
+                                    <div class="sel_class">
+                                        <!-- <input type="text" name="username" class="form_int"> -->
+                                        <select name="" id="" class="form_int">
+                                            <option value="">1</option>
+                                            <option value="">2</option>
+                                            <option value="">3</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="formlist clearfix">
+                                    <div class="formtit">文章详情:</div>
+                                    <div class="oh">
+                                        <div class="mb20">
+                                            <textarea name="content" id="editor" placeholder=""></textarea>
+                                        </div>
+                                        <div class="p10 oh">
+                                            <div class="fabu_yzm fz14">
+                                                <span class="fabu_yzm1 fl">验证码:</span>
+                                                <input class="fabu_yzm2 fl" type="" name="pl_fabu_yam" id="" value="" placeholder="请输入验证码" />
+                                                <img style="width: 110px;" id="captcha" class="yam_img fl" src="/captcha.html" alt="">
+                                                <div class="fabu_yzm3  fl fz14 c6"><a href="javascript:$('#captcha').attr('src','/captcha.html?temp='+Math.random())">看不清楚 <span>换一换</span></a></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="button" value="发布" class="my_msg_Submit mb20" onclick="send_comment()">
+                            </form>
+                        </div>
+                    </div>
+                    <!-- 我的文章 -->
+                    <div class="mybox_R_one hook" style="display: none;">
+                        <div class="my_b_r_type my_b_r_type1">
+                            <span class="">我的文章</span>
+                        </div>
+                        <div class="w100">
+                            <!-- <div class="zanwu">暂无数据</div> -->
+                            <div class="p30">
+                                <a href="" class="tuliao_list">
+                                    <div class="list_avt oh mb20">
+                                        <img src="images/a_12.jpg" alt="" class="mr20">
+                                        <div class=" fz18 c6 lh50 h50">中国氟碳涂料网</div>
+                                    </div>
+                                    <h3 class="t_title fz20 c3">聚醚醚酮PEEK棒的机械性能优异是因为它兼备韧性和刚性</h3>
+                                    <p class="t_info fz16 c6">PEEK棒(聚醚醚酮)是具备优异的特种性能，与其他的工程塑料相比更具优势，它具备很强的耐高温性，空气中最大允许工作温度介于260度和310度之间；良好的自润滑性，能作用于如：套筒轴承、滑动轴承...密封圈等要求摩擦性能强的领域；稳定的绝缘性，而且机械性能特别优异，能耐化学品的腐蚀，阻燃、耐水解等。</p>
+                                    <div class="oh t_time_box">
+                                        <div class="time fl fz14 c9 lh30 oh">
+                                            <p class="fl">2019-06-06 06:00</p>
+                                            <div class="fl oh t_icon_list">
+                                                <span class="fl lh30 icon--- fz18"></span>
+                                                <p class="fl">1.3万</p>
+                                            </div>
+                                        </div>
+                                        <div class="t_icon_box fr lh30">
+                                            <div class="fl oh t_icon_list">
+                                                <span class="fl lh30 icon-16 fz18"></span>
+                                                <p class="fl">转发</p>
+                                            </div>
+                                            <div class="fl oh t_icon_list">
+                                                <span class="fl lh30 icon-7 fz14"></span>
+                                                <p class="fl">123</p>
+                                            </div>
+                                            <div class="fl oh t_icon_list">
+                                                <span class="fl lh30 icon-2 fz14"></span>
+                                                <p class="fl">111</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="" class="tuliao_list">
+                                    <div class="list_avt oh mb20">
+                                        <img src="images/a_12.jpg" alt="" class="mr20">
+                                        <div class=" fz18 c6 lh50 h50">中国氟碳涂料网</div>
+                                    </div>
+                                    <h3 class="t_title fz20 c3">聚醚醚酮PEEK棒的机械性能优异是因为它兼备韧性和刚性</h3>
+                                    <p class="t_info fz16 c6">PEEK棒(聚醚醚酮)是具备优异的特种性能，与其他的工程塑料相比更具优势，它具备很强的耐高温性，空气中最大允许工作温度介于260度和310度之间；良好的自润滑性，能作用于如：套筒轴承、滑动轴承...密封圈等要求摩擦性能强的领域；稳定的绝缘性，而且机械性能特别优异，能耐化学品的腐蚀，阻燃、耐水解等。</p>
+                                    <div class="oh t_time_box">
+                                        <div class="time fl fz14 c9 lh30 oh">
+                                            <p class="fl">2019-06-06 06:00</p>
+                                            <div class="fl oh t_icon_list">
+                                                <span class="fl lh30 icon--- fz18"></span>
+                                                <p class="fl">1.3万</p>
+                                            </div>
+                                        </div>
+                                        <div class="t_icon_box fr lh30">
+                                            <div class="fl oh t_icon_list">
+                                                <span class="fl lh30 icon-16 fz18"></span>
+                                                <p class="fl">转发</p>
+                                            </div>
+                                            <div class="fl oh t_icon_list">
+                                                <span class="fl lh30 icon-7 fz14"></span>
+                                                <p class="fl">123</p>
+                                            </div>
+                                            <div class="fl oh t_icon_list">
+                                                <span class="fl lh30 icon-2 fz14"></span>
+                                                <p class="fl">111</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div>
+                            <!-- 分页 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mb30"></div>
+</div>
+
+{/block}
+
+{block name="js"}
+<script>
+    //开启加载层
+    function openload() {
+        $(".load_box").fadeIn(500);
+    };
+    //关闭加载层
+    function closeload() {
+        $(".load_box").fadeOut(500);
+    };
+    //加载完成关闭
+    $(window).load(function() {
+        closeload();
+    });
+
+    $(".mybox_L_div").click(function() {
+        var _index = $(".mybox_L_div").index(this);
+        $(".mybox_L_div").removeClass('cur');
+        $(".mybox_L_div").eq(_index).addClass('cur');
+        $(".hook").hide();
+        $(".hook").eq(_index).show();
+    })
+    $('input[type="file"]').on('change', function(e) {
+        var _name = $(this).attr('data-name');
+        var file = e.target.files[0];
+        var reader = new FileReader();
+        reader.readAsDataURL(file); // 读出 base64
+        reader.onloadend = function() {
+            // 图片的 base64 格式, 可以直接当成 img 的 src 属性值
+            var dataURL = reader.result;
+            // 下面逻辑处理
+            $("#" + _name + "").attr('src', dataURL);
+            $('input[name="' + _name + '"]').attr('value', dataURL)
+        };
+    });
+
+    function getNum(str, _this) { //购物车加减
+        var _numDom = $(_this).parents('.car_num_box').find("input");
+        var _val = Number(_numDom.val());
+        if (str) { //+
+            _numDom.val(_val + 1);
+        } else { //-
+            if (_val <= 1) {
+                _numDom.val(1);
+            } else {
+                _numDom.val(_val - 1);
+            }
+        };
+        getTotal();
+    };
+    var checkArr = []; //选中id
+    getTotal();
+
+    function getTotal() { //总价计算
+        var _total = 0;
+        $.each($(".car_box tr"), function(index, el) {
+            if (index) {
+                var _num = $(el).find('.car_num_box').find('input').val();
+                var _price = $(el).find('.price').html().trim();
+                var _freight = $(el).find('.freight').html().trim();
+                var _checkbox = $(el).find('.checkbox').is(':checked');
+                if (_checkbox) {
+                    _total += (_price * _num) + Number(_freight);
+                }
+            }
+        });
+        $(".total").html(_total ? _total.toFixed(2) : 0);
+    };
+    $(".car_box .checkbox").change(function() { //checkbox  change
+        checkArr = [];
+        if ($(this).attr('id') == 'all') {
+            if (!$(this).is(':checked')) {
+                $.each($(".car_box .checkbox"), function(index, el) {
+                    $(el).removeAttr('checked')
+
+                });
+            } else {
+                $.each($(".car_box .checkbox"), function(index, el) {
+                    $(el).attr('checked', 'checked')
+                });
+            }
+
+        };
+        var _checkNum = 0;
+        $.each($(".car_box .checkbox"), function(index, el) {
+            if (index) {
+                if ($(this).is(':checked')) {
+                    _checkNum++;
+                    checkArr.push($(this).attr('data-id'));
+                }
+            }
+        });
+        if (_checkNum == $(".car_box .checkbox").length - 1) { //全选
+            $("#all").attr('checked', 'checked');
+        } else { //非全选
+            $("#all").removeAttr('checked');
+        }
+        getTotal();
+    });
+
+    function del() { //删除
+        if (!checkArr.length) { //没有选择商品
+
+        }
+    }
+
+    function settlement() { //结算
+        if (!checkArr.length) { //没有选择商品
+
+        }
+    }
+
+    var editor = new Simditor({
+        textarea: $('#editor'),
+        toolbar: ['title', 'bold', 'italic', 'underline', 'strikethrough', 'fontScale', 'color', 'ol', 'ul',
+            'blockquote', 'table', 'link', 'image', 'hr', 'indent', 'outdent', 'alignment'
+        ],
+        upload: {
+            url: '/index/Forum/uploadContentPic',
+            params: null,
+            fileKey: 'file_path',
+            connectionCount: 1,
+            leaveConfirm: '正在上传图片请勿关闭此页面'
+        },
+        placeholder: '',
+        imageButton: ['upload'],
+    });
+    editor.sync();
+
+    function send_comment() {
+        console.log($('#editor').val())
+    }
+
+    function updateUserInfo () {
+
+        var formData = new FormData($('#form1')[0])
+        $.ajax({
+            url:"{:url('index/My/saveInfo')}",
+            type:'post',
+            dataType:'json',
+            data:formData,
+            contentType:false,
+            processData:false,
+            success:function(data){
+                layer.msg(data.msg)
+            }
+        })
+    }
+
+    function auth()
+    {
+        var formData = new FormData($('#form2')[0])
+        $.ajax({
+            url:"{:url('index/My/auth')}",
+            type:'post',
+            dataType:'json',
+            data:formData,
+            contentType:false,
+            processData:false,
+            success:function(data){
+                layer.msg(data.msg)
+            }
+        })
+    }
+
+    function removeBoth(_this,user_id)
+    {
+        $.ajax({
+            url:"{:url('index/My/focusUserOrRemove')}",
+            type:'post',
+            dataType:'json',
+            data:{
+                user_id : user_id,
+                type : 2,
+            },
+            success:function(data){
+                $(_this).parents('.both_box').remove();
+                layer.msg(data.msg)
+            }
+        })
+    }
+</script>
+
+{block name="ex_js"}
+
+{/block}
+{/block}

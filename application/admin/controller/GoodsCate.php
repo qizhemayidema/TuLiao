@@ -9,7 +9,6 @@ use app\common\model\Goods as GoodsModel;
 use think\Validate;
 
 class GoodsCate extends Base
-
 {
     public $cateType = 5;
 

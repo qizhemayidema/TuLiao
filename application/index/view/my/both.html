@@ -1,0 +1,57 @@
+{extend name="my/common/base"}
+
+{block name="title"}我的关注 -  个人中心{/block}
+
+
+{block name="content"}
+<!-- 我的关注 -->
+<div class="mybox_R_one hook">
+    <div class="my_b_r_type my_b_r_type1">
+        <span class="">我的关注</span>
+    </div>
+    <div class="w100">
+        <div class="p30">
+            {foreach $both as $key => $value}
+            <div class="daka_list mb30 oh both_box">
+                <a href="" class="list_avt oh  fl">
+                    <img src="{$value.avatar_url}" alt="" class="mr20">
+                    <div class=" fz18 c3 lh25 h25 oh1">{$value.nickname}</div>
+                    <!--<div class="lh25 h25 oh1 fz16 c9">EEK棒(聚醚醚酮)是具备优</div>-->
+                </a>
+                <div class="follow fr">
+                    <button onclick="removeBoth(this,'{$value.user_id}')" type="button">取消关注</button> <!-- 已关注 -->
+                </div>
+            </div>
+            {/foreach}
+            <div style="margin-top: 15px;text-align: center;">
+                {$both->render()|raw}
+            </div>
+        </div>
+    </div>
+    <div>
+        <!-- 分页 -->
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<script>
+
+    function removeBoth(_this,user_id)
+    {
+        $.ajax({
+            url:"{:url('index/My/focusUserOrRemove')}",
+            type:'post',
+            dataType:'json',
+            data:{
+                user_id : user_id,
+                type : 2,
+            },
+            success:function(data){
+                $(_this).parents('.both_box').remove();
+                layer.msg(data.msg)
+            }
+        })
+    }
+</script>
+{/block}

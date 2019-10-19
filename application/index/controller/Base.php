@@ -2,9 +2,9 @@
 
 namespace app\index\controller;
 
-use app\admin\controller\InformationCate as InformationCateController;
-use app\admin\controller\ForumCate as ForumCateController;
-use app\admin\controller\VideoCate as VideoCateController;
+use app\common\typeCode\InformationCate as InformationCateController;
+use app\common\typeCode\ForumCate as ForumCateController;
+use app\common\typeCode\VideoCate as VideoCateController;
 use app\common\model\Article;
 use app\common\model\Category;
 use think\Controller;
@@ -32,6 +32,8 @@ class Base extends Controller
         $this->getUserInfo();
 
         $this->loadingPublicData(\think\facade\Request::instance());
+
+
     }
 
     /**
@@ -40,7 +42,7 @@ class Base extends Controller
      */
     private function loadingPublicData(Request $request)
     {
-        if (!$request->isAjax()){
+        if ($request->isGet()){
             $this->assign('description',$this->getConfig('description'));
 
             $this->assign('keywords',$this->getConfig('keywords'));

@@ -2356,11 +2356,13 @@ textarea {
 
 .uploadfile {
     float: left;
-    width: 64px;
-    height: 64px;
+    /*width: 64px;*/
+    /*height: 64px;*/
     border: 1px solid #ddd;
-    background-image: url(../images/upimg_03.jpg);
-    background-repeat: no-repeat;
+    background: url(../images/upimg_03.jpg) no-repeat;
+    height:100%;
+    width:100%;
+    /*background-repeat: no-repeat;*/
     background-size: 64px 64px;
     cursor: pointer;
     position: relative;

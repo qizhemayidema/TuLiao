@@ -4,7 +4,7 @@ namespace app\index\controller;
 
 use think\Controller;
 use think\Request;
-use app\admin\controller\GoodsCate as GoodsCateController;
+use app\common\typeCode\GoodsCate as GoodsCateController;
 use app\common\model\Category as CateModel;
 use app\common\model\Goods as GoodsModel;
 use app\common\model\Shopping as ShoppingModel;
@@ -73,7 +73,7 @@ class Goods extends Base
             ->where(['cate_id'=>$two_cate['id']])
             ->order('real_price',$order_price)
             ->order('online_time',$order_online_time)
-            ->paginate(1);
+            ->paginate(8);
 
 //        dump($goods_list);die;
 
@@ -116,18 +116,80 @@ class Goods extends Base
             return json(['code' => 0, 'msg' => '该商品已下架,无法添加到购物车']);
         }
 
-        $userShopping = (new ShoppingModel())->where(['user_id' => $user_info->id, 'goods_id' => $post['goods_id']]);
+        $userShopping = (new ShoppingModel())->where(['user_id' => $user_info->id, 'goods_id' => $post['goods_id']])->find();
 
         if ($userShopping){
             $userShopping->setInc('num',$post['num']);
         }else{
-            $userShopping->insert([
+            (new ShoppingModel())->insert([
                 'user_id'   => $user_info->id,
                 'goods_id'  => $post['goods_id'],
-                'num'       => $post['num']
+                'num'       => $post['num'],
+                'create_time' => time(),
             ]);
         }
         return json(['code'=>1,'msg'=>'添加成功']);
+    }
+
+    public function removeShopping(Request $request)
+    {
+        $user_info = $this->userInfo;
+        $post = $request->post();
+
+        $rules = [
+            "num" => 'require|number',
+            "goods_id" => 'require|number',
+        ];
+
+        $message = [
+            'num.require' => '请求非法',
+            'num.number' => '请求非法',
+            'goods_id.require' => '请求非法',
+            'goods_id.number' => '请求非法',
+        ];
+
+        $validate = new Validate($rules, $message);
+        if (!$validate->check($post)) {
+            return json(['code' => 0, 'msg' => $validate->getError()]);
+        }
+
+        //检查商品状态
+        if (!(new GoodsModel())->allowData()->find($post['goods_id'])) {
+            return json(['code' => 0, 'msg' => '该商品已下架']);
+        }
+
+        $userShopping = (new ShoppingModel())->where(['user_id' => $user_info->id, 'goods_id' => $post['goods_id']])->find();
+
+        if ($userShopping){
+            if ($userShopping['num'] - $post['num'] <= 0) return json(['code'=>0,'msg'=>'至少留有一个商品']);
+            $userShopping->setDec('num',$post['num']);
+        }
+        return json(['code'=>1,'msg'=>'减少成功']);
+    }
+
+    public function deleteShopping(Request $request)
+    {
+        $user_info = $this->userInfo;
+        $post = $request->post();
+
+        $rules = [
+            "ids" => 'require',
+        ];
+
+        $message = [
+            'ids.require' => '请求非法',
+        ];
+
+        $validate = new Validate($rules, $message);
+        if (!$validate->check($post)) {
+            return json(['code' => 0, 'msg' => $validate->getError()]);
+        }
+
+
+        (new ShoppingModel())->where(['user_id' => $user_info->id])->whereIn('id',$post['ids'])->delete();
+
+        return json(['code'=>1,'msg'=>'操作成功']);
+
     }
 
 }

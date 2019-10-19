@@ -1,0 +1,116 @@
+{extend name="my/common/base"}
+
+{block name="title"}我的地址 -  个人中心{/block}
+
+
+{block name="content"}
+<!-- 我的地址 -->
+<div class="mybox_R_one hook">
+    <div class="my_b_r_type my_b_r_type1">
+        <span class="">我的地址</span>
+        <div class="fr del_settlement oh">
+            <button type="button" class="btn settlement"><a href="{:url('index.my.addressCreate')}" class="cf">添加地址</a></button>
+        </div>
+    </div>
+    <div class="w100">
+        <div class="next-table">
+            <table role="table fz12" style="width: 100%;">
+                <thead class="next-table-header fz12 tac">
+                <tr>
+                    <th rowspan="1" type="header" class="next-table-cell next-table-header-node">
+                        <div class="next-table-cell-wrapper">收货人</div>
+                    </th>
+                    <th rowspan="1" type="header" class="next-table-cell next-table-header-node">
+                        <div class="next-table-cell-wrapper" data-spm-anchor-id="0.0.0.i0.3dda175cAtI8CC">所在地区</div>
+                    </th>
+                    <th rowspan="1" type="header" class="next-table-cell next-table-header-node">
+                        <div class="next-table-cell-wrapper">详细地址</div>
+                    </th>
+                    <th rowspan="1" type="header" class="next-table-cell next-table-header-node">
+                        <div class="next-table-cell-wrapper">电话/手机</div>
+                    </th>
+                    <th rowspan="1" type="header" class="next-table-cell next-table-header-node">
+                        <div class="next-table-cell-wrapper">操作</div>
+                    </th>
+                    <th rowspan="1" type="header" class="next-table-cell next-table-header-node">
+                        <div class="next-table-cell-wrapper"></div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody class="next-table-body tac fz12">
+                <tr class="next-table-row first" role="row">
+                    <td type="body" class="next-table-cell first">
+                        <div class="next-table-cell-wrapper">朱佳鹏</div>
+                    </td>
+                    <td type="body" class="next-table-cell">
+                        <div class="next-table-cell-wrapper"><span>北京 北京市 昌平区 北七家镇 </span></div>
+                    </td>
+                    <td type="body" class="next-table-cell">
+                        <div class="next-table-cell-wrapper">平西府村388号家合超市</div>
+                    </td>
+                    <td type="body" class="next-table-cell">
+                        <div class="next-table-cell-wrapper"><span>13*******61<br></span></div>
+                    </td>
+                    <td type="body" class="next-table-cell">
+                        <div class="next-table-cell-wrapper">
+                            <div class="tAction "><a class="t-change" href="">修改</a><span class="t-line">|</span><span class="t-delete">删除</span></div>
+                        </div>
+                    </td>
+                    <td type="body" class="next-table-cell last">
+                        <div class="next-table-cell-wrapper ">
+                            <div class="tac"><span class="t-default">默认地址</span></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="next-table-row first" role="row">
+                    <td type="body" class="next-table-cell first">
+                        <div class="next-table-cell-wrapper">朱佳鹏</div>
+                    </td>
+                    <td type="body" class="next-table-cell">
+                        <div class="next-table-cell-wrapper"><span>北京 北京市 昌平区 北七家镇 </span></div>
+                    </td>
+                    <td type="body" class="next-table-cell">
+                        <div class="next-table-cell-wrapper">平西府村388号家合超市</div>
+                    </td>
+                    <td type="body" class="next-table-cell">
+                        <div class="next-table-cell-wrapper"><span>13*******61<br></span></div>
+                    </td>
+                    <td type="body" class="next-table-cell">
+                        <div class="next-table-cell-wrapper">
+                            <div class="tAction "><a class="t-change" href="">修改</a><span class="t-line">|</span><span class="t-delete">删除</span></div>
+                        </div>
+                    </td>
+                    <td type="body" class="next-table-cell last">
+                        <div class="next-table-cell-wrapper">
+                            <div><span class="t-setDefault">设为默认</span></div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<script>
+
+    function removeBoth(_this,user_id)
+    {
+        $.ajax({
+            url:"{:url('index/My/focusUserOrRemove')}",
+            type:'post',
+            dataType:'json',
+            data:{
+                user_id : user_id,
+                type : 2,
+            },
+            success:function(data){
+                $(_this).parents('.both_box').remove();
+                layer.msg(data.msg)
+            }
+        })
+    }
+</script>
+{/block}

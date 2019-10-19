@@ -2,14 +2,14 @@
 
 namespace app\index\controller;
 
-use app\admin\controller\InformationCate;
+use app\common\typeCode\InformationCate;
 use app\common\model\Article;
 use app\common\model\Category as CateModel;
 use app\common\model\Goods;
 use app\common\model\Image as Img;
-use app\admin\controller\GoodsCate as GoodsCateController;
-use app\admin\controller\InformationCate as InformationCateController;
-use app\admin\controller\Information as InformationController;
+use app\common\typeCode\GoodsCate as GoodsCateController;
+use app\common\typeCode\InformationCate as InformationCateController;
+use app\common\typeCode\Information as InformationController;
 use app\common\model\Goods as GoodsModel;
 
 

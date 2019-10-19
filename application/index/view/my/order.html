@@ -1,0 +1,79 @@
+{extend name="my/common/base"}
+
+{block name="title"}我的订单 -  个人中心{/block}
+
+
+{block name="content"}
+<!-- 我的订单 -->
+<div class="mybox_R_one hook">
+    <div class="my_b_r_type my_b_r_type1">
+        <span class="">我的订单</span>
+    </div>
+    <div class="w100">
+        <div class="table_box">
+            <table class="table table-responsive tab_hook">
+                <tbody>
+                <tr>
+                    <th height="31">订单号</th>
+                    <th height="31">图片</th>
+                    <th height="31">支付金额(元)</th>
+                    <th height="31">收货地址</th>
+                    <th height="31">状态</th>
+                    <th height="31">创建时间</th>
+                    <th height="31">付款时间</th>
+                </tr>
+                {foreach $order as $key => $value}
+                <tr>
+                    <td height="80">{$value.order_code}</td>
+                    <td height="80"><img src="{$value.pic}" alt="" width="50" height="50"></td>
+                    <td height="80" class="price">{$value.pay_money}</td>
+                    <td height="80">{$value.address}</td>
+                    <td height="80">
+                        {if $value.status == 1}
+                        未付款
+                        {elseif $value.status == 2}
+                        已付款
+                        {elseif $value.status == 3}
+                        已发货
+                        {elseif $value.status == 4}
+                        已收货
+                        {/if}
+                    </td>
+                    <td height="80">{$value.create_time|date="Y-m-d H:i:s"}</td>
+                    <td height="80">{$value.pay_time|date="Y-m-d H:i:s"}</td>
+                </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div>
+        <!-- 分页 -->
+        <div style="margin-top: 15px;text-align: center;">
+            {$order->render()|raw}
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<script>
+
+    function removeBoth(_this,user_id)
+    {
+        $.ajax({
+            url:"{:url('index/My/focusUserOrRemove')}",
+            type:'post',
+            dataType:'json',
+            data:{
+                user_id : user_id,
+                type : 2,
+            },
+            success:function(data){
+                $(_this).parents('.both_box').remove();
+                layer.msg(data.msg)
+            }
+        })
+    }
+</script>
+{/block}

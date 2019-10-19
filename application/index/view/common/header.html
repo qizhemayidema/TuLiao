@@ -3,7 +3,7 @@
         <p class="">您好，欢迎访问中国氟碳涂料网！</p>
         <div class="login fr">
             {if session(config('app.index_user_session_path'))}
-            <a href="javascript:void(0);" onclick="">{:session(config('app.index_user_session_path'))['nickname']}</a>
+            <a href="{:url('my')}" >{:session(config('app.index_user_session_path'))['nickname']}</a>
             <a href="{:url('/index/Login/logout')}">退出</a>
             {else}
             <a href="javascript:void(0);" onclick="showMarks(loginHTML);">登录</a>

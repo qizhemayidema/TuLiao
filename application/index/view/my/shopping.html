@@ -1,0 +1,155 @@
+{extend name="my/common/base"}
+
+{block name="title"}购物车 -  个人中心{/block}
+
+
+{block name="content"}
+<!-- 购物车 -->
+<div class="mybox_R_one hook" >
+    <div class="my_b_r_type my_b_r_type1">
+        <span class="">购物车</span>
+        <div class="fr del_settlement oh">
+            <div class="fz14 red fw9 fl mr10">合计:<span class="total">1000</span></div>
+            <button type="button" class="btn del_car" onclick="removeShopping();">删除</button>
+            <button type="button" class="btn settlement" onclick="settlement();">结算</button>
+        </div>
+    </div>
+    <div class="w100">
+        <div class="table_box">
+            <table class="table table-responsive tab_hook car_box">
+                <tbody>
+                <tr>
+                    <!--  checked="checked" -->
+                    <th><label for="all"><input type="checkbox" id="all" class="checkbox">全选</label></th>
+                    <th height="31">商品名称</th>
+                    <th height="31">图片</th>
+                    <th height="31">单价(元)</th>
+                    <th height="31">数量</th>
+                    <th height="31">创建时间</th>
+                </tr>
+                {foreach $shopping as $key => $value}
+                <tr>
+                    <td><input type="checkbox" class="checkbox" data-id="{$value.id}"></td>
+                    <td height="80">{$value.title}</td>
+                    <td height="80"><img src="{$value.pic}" alt="" width="50" height="50"></td>
+                    <td height="80" class="price">{$value.real_price}</td>
+                    <td height="80">
+                        <div class="oh car_num_box">
+                            <button type="button" onclick="getNum('',this)">-</button>
+                            <input type="text" data-id="{$value.goods_id}" readonly="" value="{$value.num}">
+                            <button type="button" onclick="getNum('add',this)">+</button>
+                        </div>
+                    </td>
+                    <td height="80">{$value.create_time|date="Y-m-d H:i:s"}</td>
+                </tr>
+                {/foreach}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<script>
+
+    function removeShopping()
+    {
+        var ids = []
+        $('.checkbox:checked').each(function(k,v){
+            ids.push($(v).data('id'))
+        })
+        if (!ids.length) return false;
+        $.ajax({
+            url:"{:url('index/Goods/deleteShopping')}",
+            dataType:'json',
+            type:'post',
+            data:{
+                "ids" : ids,
+            },
+            success:function(data){
+                layer.msg(data.msg)
+                if (data.code == 1) setTimeout(function(){window.location.reload()},500)
+            }
+        })
+    }
+
+    function getNum(str, _this) { //购物车加减
+        var _numDom = $(_this).parents('.car_num_box').find("input");
+        var _val = Number(_numDom.val());
+        if (str) { //+
+            var url = "{:url('index/Goods/addShopping')}";
+            _numDom.val(_val + 1);
+        } else { //-
+            var url = "{:url('index/Goods/removeShopping')}";
+            if (_val <= 1) {
+                _numDom.val(1);
+            } else {
+                _numDom.val(_val - 1);
+            }
+        };
+        $.ajax({
+            url:url,
+            dataType:'json',
+            type:'post',
+            data:{
+                "num" : 1,
+                "goods_id" : _numDom.data('id')
+            },
+            success:function(data){
+                if (data.code == 0) layer.msg(data.msg)
+            }
+        })
+        getTotal();
+    };
+    var checkArr = []; //选中id
+    getTotal();
+
+    function getTotal() { //总价计算
+        var _total = 0;
+        $.each($(".car_box tr"), function(index, el) {
+            if (index) {
+                var _num = $(el).find('.car_num_box').find('input').val();
+                var _price = $(el).find('.price').html().trim();
+                var _checkbox = $(el).find('.checkbox').is(':checked');
+                if (_checkbox) {
+                    _total += (_price * _num)
+                }
+            }
+        });
+        $(".total").html(_total ? _total.toFixed(2) : 0);
+    };
+    $(".car_box .checkbox").change(function() { //checkbox  change
+        checkArr = [];
+        if ($(this).attr('id') == 'all') {
+            if (!$(this).is(':checked')) {
+                $.each($(".car_box .checkbox"), function(index, el) {
+                    $(el).removeAttr('checked')
+
+                });
+            } else {
+                $.each($(".car_box .checkbox"), function(index, el) {
+                    $(el).attr('checked', 'checked')
+                });
+            }
+
+        };
+        var _checkNum = 0;
+        $.each($(".car_box .checkbox"), function(index, el) {
+            if (index) {
+                if ($(this).is(':checked')) {
+                    _checkNum++;
+                    checkArr.push($(this).attr('data-id'));
+                }
+            }
+        });
+        if (_checkNum == $(".car_box .checkbox").length - 1) { //全选
+            $("#all").attr('checked', 'checked');
+        } else { //非全选
+            $("#all").removeAttr('checked');
+        }
+        getTotal();
+    });
+</script>
+{/block}

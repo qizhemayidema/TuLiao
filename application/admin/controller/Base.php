@@ -24,7 +24,7 @@ class Base extends Controller
      */
     protected function getConfig($name)
     {
-        if ($name = '*') return json_decode(file_get_contents(self::WEBSITE_CONFIG_PATH),true);
+        if ($name == '*') return json_decode(file_get_contents(self::WEBSITE_CONFIG_PATH),true);
         if (!$this->configObject){
             $this->configObject = json_decode(file_get_contents(self::WEBSITE_CONFIG_PATH));
         }
