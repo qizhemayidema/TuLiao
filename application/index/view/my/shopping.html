@@ -151,5 +151,16 @@
         }
         getTotal();
     });
+
+
+    function settlement() { //结算
+        if (!checkArr.length) { //没有选择商品
+            layer.msg('请选择商品')
+            return false;
+        }
+
+        window.location.href = "{:url('index.order.confirm')}?shopping=" + checkArr.join('_')
+    }
+
 </script>
 {/block}

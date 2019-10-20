@@ -27,7 +27,15 @@
                     <td height="80">{$value.order_code}</td>
                     <td height="80"><img src="{$value.pic}" alt="" width="50" height="50"></td>
                     <td height="80" class="price">{$value.pay_money}</td>
-                    <td height="80">{$value.address}</td>
+                    <td height="80">
+                        <?php $temp_address = json_decode($value['address'],true)?>
+                        {$temp_address.province} {$temp_address.city} {$temp_address.area}
+                        <br/>
+                        {$temp_address.address}
+                        <br/>
+                        {$temp_address.user_name} {$temp_address.phone}
+
+                    </td>
                     <td height="80">
                         {if $value.status == 1}
                         未付款
@@ -40,7 +48,7 @@
                         {/if}
                     </td>
                     <td height="80">{$value.create_time|date="Y-m-d H:i:s"}</td>
-                    <td height="80">{$value.pay_time|date="Y-m-d H:i:s"}</td>
+                    <td height="80">{if $value.pay_time}{$value.pay_time|date="Y-m-d H:i:s"}{/if}</td>
                 </tr>
                 {/foreach}
                 </tbody>

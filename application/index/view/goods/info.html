@@ -73,7 +73,7 @@
                                 <div class="fz16 c6 lh30 fl">件</div>
                             </div>
                             <div class="oh shop_btn_box">
-                                <button type="button" class="red fz16" style="background: #ffeded;">立即购买</button>
+                                <!--<button type="button" class="red fz16" style="background: #ffeded;">立即购买</button>-->
                                 <button type="button" class="cf fz16" style="background: #ff0036;" onclick="addShopping('{$goods.id}')"><span class="icon--"></span>加入购物车</button>
                             </div>
                         </div>
@@ -154,7 +154,7 @@
 
             },
             success:function(data){
-                layer.msg(data.msg)
+                window.location.href = "{:url('index.my.shopping')}"
             }
         })
     }

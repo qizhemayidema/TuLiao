@@ -43,4 +43,8 @@ Route::group('/',function(){
         Route::get('/article/create','index/My/articleCreate')->name('index.my.articleCreate');
         Route::get('/article','index/My/article')->name('index.my.article');
     });
+
+    Route::group('order',function(){
+        Route::get('/confirm','index/Order/confirm')->name('index.order.confirm');
+    });
 });

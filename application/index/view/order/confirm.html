@@ -1,0 +1,122 @@
+{extend name="base/base"}
+
+{block name="title"}
+确认订单
+{/block}
+
+{block name="extends_source"}
+<link href="__STATIC__/css/shop.css" rel="stylesheet" type="text/css">
+
+<script src="__STATIC__/js/shop.js"></script>
+{/block}
+
+{block name="body"}
+<!--  -->
+{:token()}
+<div class="w1200 ">
+    <div class="index_bt oh">
+        <h3 class="index_bt_h3">订单</h3>
+    </div>
+    <div class="oh w1200">
+        {include file="common/left_goods_cate"}
+        <!--  -->
+        <div class="w924 fr k1">
+            <div class="kuang_title">
+                <h3 class="fz16 c3 fl position" style="width: 50%;">您的位置：<a href="/" class="c3">首页</a> &gt; <a href="###" class="c3">确定订单</a> </h3>
+                <p></p>
+            </div>
+            <div class="p25 ">
+                <div class="oh mb20">
+                    <div class="adds_list address_btn">
+                        <a href="{:url('index.my.addressCreate')}" class="btn btn-info">添加地址</a>
+                    </div>
+                    <!--  -->
+                    <div class="add_list_box fz14 c6">
+                        {foreach $address as $key => $value}
+                        <div class="add_list">
+                            <label for="add{$key}">
+                                <input type="radio" name="add" value="{$value.id}" id="add{$key}" {if $value.is_default == 1}checked=""{/if}>
+                                <p>{$value.province}{$value.city}{$value.area}{$value.address}</p>
+                                <p>&nbsp;联系人:{$value.user_name}&nbsp;手机号:{$value.phone}</p>
+                            </label>
+                        </div>
+                        {/foreach}
+                    </div>
+                    <!--  -->
+                    <div class="table_box">
+                        <table class="table table-responsive tab_hook">
+                            <tbody>
+                            <tr>
+                                <th height="31">名称</th>
+                                <th height="31">图片</th>
+                                <th height="31">价格(元)</th>
+                                <th height="31">数量</th>
+                                <th height="31">时间</th>
+                            </tr>
+                            <?php $order_price = 0;?>
+                            {foreach $shopping as $key => $value}
+                            <input type="hidden" name="shopping_id" value="{$value.id}">
+                            <tr>
+                                <td height="80"><a href="">{$value.goods_title}</a></td>
+                                <td height="80"><a href=""><img src="{$value.goods_pic}" alt="" width="50" height="50"></a></td>
+                                <td height="80" class="price"><a href="">{$value.real_price}</a></td>
+                                <td height="80"><a href="">{$value.goods_num}</a></td>
+                                <td height="80"><a href="">{$value.create_time|date="Y-m-d H:i:s"}</a></td>
+                            </tr>
+                            <?php $order_price += ($value['goods_num'] * $value['real_price'])?>
+                            {/foreach}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--  -->
+                    <div class="tr sub_order">
+                        <h3>
+                            实付款<span class="red total fz16 fw9">{$order_price}</span>元
+                        </h3>
+                        <button onclick="makeOrder()" type="button"><img src="__STATIC__/images/sbt_order.gif" alt=""></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mb30"></div>
+<!--&lt;!&ndash; 加载中 &ndash;&gt;-->
+<!--<div class="load_box">-->
+<!--<img src="__STATIC__/images/load.gif" alt="">加载中...-->
+<!--</div>-->
+{/block}
+
+{block name="js"}
+<script>
+
+
+    var makeOrder = function()
+    {
+        var shopping_ids = []
+        $('input[name=shopping_id]').each(function(k,v){
+            shopping_ids.push($(v).val())
+        })
+        var address_id = $('input[name=add]:checked').val()
+
+        $.ajax({
+            url:"{:url('index/Order/make')}",
+            type:'post',
+            dataType:'json',
+            data:{
+                shopping_ids:shopping_ids,
+                address_id:address_id,
+                __token__ : $('input[name=__token__]').val()
+            },
+            success:function(data){
+                if (data.code == 0){
+                    layer.msg(data.msg)
+                } else{
+                    window.location.href = "{:url('index.my.order')}"
+                }
+            }
+        })
+    }
+</script>
+
+{/block}

@@ -21,8 +21,14 @@ class Goods extends Model
         $this->where(['id'=>$goods_id])->update(['status'=>$new_status]);
     }
 
-    public function allowData()
+    public function allowData($alias = '')
     {
+        if ($alias){
+            return $this->where([
+                $alias.'.delete_time'   => 0,
+                $alias.'.status'        => 1,
+            ]);
+        }
         return $this->where([
             'delete_time'   => 0,
             'status'        => 1,
