@@ -1,0 +1,195 @@
+{extend name="base/base"}
+
+{block name="title"}{$article.title}{/block}
+
+{block name="extends_source"}
+<link href="__STATIC__/css/simditor.css" rel="stylesheet" type="text/css">
+
+<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="__STATIC__/js/module.js"></script>
+<script type="text/javascript" src="__STATIC__/js/hotkeys.js"></script>
+<script type="text/javascript" src="__STATIC__/js/uploader.js"></script>
+<script type="text/javascript" src="__STATIC__/js/simditor.js"></script>
+
+{/block}
+
+{block name="body"}
+<!--  -->
+<input type="hidden" name="id" value="{$id}">
+{:token()}
+<div class="w1200">
+    <div class="index_bt oh">
+        <h3 class="index_bt_h3">社区</h3>
+    </div>
+    <!--  -->
+    <div class="oh">
+        {include file="forum/common/right"}
+
+        <div class="w888 fl ">
+            <div class="mb20 k1">
+                <div class="n_info_title tac">
+                    <div class="mb10">{$article.title}</div>
+                    <div class="oh t_time_box">
+                        <div class="t_icon_box fr lh30">
+                            <div class="fl oh t_icon_list">
+                                <span class="fl lh30 icon-7 fz14"></span>
+                                <p class="fl">{$article.comment_sum}</p>
+                            </div>
+                            <div id="like" class="fl oh t_icon_list {if $is_like }active{/if}">
+                                <span onclick="like()" class="fl lh30 icon-2 fz14 "></span>
+                                <p class="fl">{$article.like_sum}</p>
+                            </div>
+                        </div>
+                        <div class="time fr fz14 c9 lh30 oh">
+                            <p class="fl">{$article.create_time|date="Y-m-d H:i:s"}</p>
+                            <div class="fl oh t_icon_list">
+                                <span class="fl lh30 icon--- fz18"></span>
+                                <p class="fl">
+                                    {if $article.click > 10000}
+                                    {$article.click / 10000}万
+                                    {else}
+                                    {$article.click}
+                                    {/if}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="info fz16 lh30 c3">
+                    {$article.content|raw}
+                </div>
+            </div>
+            <!--  -->
+            <div class="xqpl k1">
+                {foreach $comment as $key => $value}
+                <div class="zhul_xx_nlzTop clearfix">
+                    <a href="{:url('index.forum.user',['id'=>$value.user_id])}" class="pltx">
+                        <img src="{$value.avatar_url}">
+                    </a>
+                    <div class="fl">
+                        <p class="zhul_xx_lzname">
+                            <a href="javascript:void(0);">{$value.username}</a>
+                        </p>
+                        <p class="zhul_xx_lzname" style="padding-left:0;">
+                            发表于<span>{$value.create_time|date="Y-m-d H:i:s"}</span>
+                        </p>
+                    </div>
+                    <div class="pl_lc">{$comment_floor_start + $key + 1}楼</div>
+                </div>
+                <div class="zhul_xx_pingtCon clearfix">
+                    <div class="fwbbox oh">
+                        <p>{$value.comment}</p>
+                    </div>
+                    <p class="dashed_line" style="margin-bottom: 10px;"></p>
+                </div>
+                {/foreach}
+
+            </div>
+            <div class="mb20" style="text-align: center;margin-top: 20px;">
+                <!-- 分页 -->
+                {$comment->render()|raw}
+            </div>
+            <div class="">
+                <div class="fabu_box ">
+                    <div class="mb20">
+                        <!--<textarea name="content" id="editor" placeholder=""></textarea>-->
+                        <textarea name="content" cols="135" rows="10" placeholder="快来评论一下吧"></textarea>
+                    </div>
+                    <div class="p10 oh">
+                        <div class="fabu_yzm fz14">
+                            <span class="fabu_yzm1 fl">验证码:</span>
+                            <input class="fabu_yzm2 fl" type="" name="pl_fabu_yam" id="" value="" placeholder="请输入验证码" />
+                            <img style="width: 110px;" id="captcha" class="yam_img fl" src="/captcha.html" alt="">
+                            <div class="fabu_yzm3  fl fz14 c6"><a href="javascript:$('#captcha').attr('src','/captcha.html?temp='+Math.random())">看不清楚 <span>换一换</span></a></div>
+                        </div>
+                        <div class="fabu_btn" style="background: red;" onclick="send_comment()">评论</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  -->
+<div class="mb30"></div>
+{/block}
+
+{block name="js"}
+<!-- 加载中 -->
+<script>
+    //开启加载层
+    function openload() {
+        $(".load_box").fadeIn(500);
+    };
+    //关闭加载层
+    function closeload() {
+        $(".load_box").fadeOut(500);
+    };
+    //加载完成关闭
+    $(window).load(function() {
+        closeload();
+    });
+    var editor = new Simditor({
+        textarea: $('#editor'),
+        toolbar: ['title', 'bold', 'italic', 'underline', 'strikethrough', 'fontScale', 'color', 'ol', 'ul',
+            'blockquote', 'table', 'link', 'image', 'hr', 'indent', 'outdent', 'alignment'
+        ],
+        upload: {
+            url: '/index/Forum/uploadContentPic',
+            params: null,
+            fileKey: 'file_path',
+            connectionCount: 1,
+            leaveConfirm: '正在上传图片请勿关闭此页面'
+        },
+        placeholder: '',
+        imageButton: ['upload'],
+    });
+    editor.sync();
+
+    function send_comment () {
+        var captcha =  $('input[name=pl_fabu_yam]').val()
+        var content = $('textarea[name=content]').val()
+        if (!content){
+            layer.msg('评论内容不能为空 ')
+            return false;
+        }
+        $.ajax({
+            url:"{:url('index/Forum/comment')}",
+            type:'post',
+            dataType:"json",
+            data:{
+                "captcha"  : captcha,
+                "content"  : content,
+                "id" : $('input[name=id]').val(),
+                "__token__" : $('input[name=__token__]').val()
+            },
+            success:function(data){
+                if (data.code == 0){
+                    layer.msg(data.msg)
+                } else{
+                    window.location.reload()
+                }
+            }
+        })
+        // console.log($('#editor').val())
+    }
+
+    function like () {
+        $.ajax({
+            url:"{:url('index/Forum/like')}",
+            type:'post',
+            dataType:"json",
+            data:{
+                "id" : $('input[name=id]').val(),
+            },
+            success:function(data){
+                if (data.code == 0){
+                    layer.msg(data.msg)
+                } else{
+                    $('#like').addClass('active')
+                }
+            }
+        })
+        // console.log($('#editor').val())
+    }
+</script>
+{/block}

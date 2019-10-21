@@ -43,8 +43,12 @@ Route::group('/',function(){
         Route::get('/article/create','index/My/articleCreate')->name('index.my.articleCreate');
         Route::get('/article','index/My/article')->name('index.my.article');
     });
-
     Route::group('order',function(){
         Route::get('/confirm','index/Order/confirm')->name('index.order.confirm');
+    });
+    Route::group('forum',function(){
+        Route::get('/','index/Forum/index')->name('index.forum.index');
+        Route::get('user/:id','index/Forum/user')->name('index.forum.user');
+        Route::get('/:id','index/Forum/info')->name('index.forum.info');
     });
 });

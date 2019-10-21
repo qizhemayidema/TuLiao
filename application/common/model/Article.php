@@ -26,8 +26,14 @@ class Article extends Model
      * 符合正常查看所需的条件
      * @return \think\db\Query
      */
-    public function allowData()
+    public function allowData($alias = '')
     {
+        if ($alias){
+            return $this->where([
+                $alias.'.delete_time' => 0,
+                $alias.'.status'    => 1,
+            ]);
+        }
         return $this->where([
             'delete_time' => 0,
             'status'    => 1,

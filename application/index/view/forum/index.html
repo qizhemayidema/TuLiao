@@ -1,0 +1,99 @@
+{extend name="base/base"}
+
+{block name="title"}社区{/block}
+
+{block name="title"}社区{/block}
+
+{block name="body"}
+<!--  -->
+<div class="w1200">
+    <div class="index_bt oh">
+        <h3 class="index_bt_h3">社区</h3>
+    </div>
+    <!--  -->
+    <div class="oh">
+        <div class="w888 fl ">
+            <div class="mb10 k1">
+                <div class="f1_tab_title t_hook">
+                    {foreach $cate as $key => $value}
+                    <a href="{:url('index.forum.index')}?cate_id={$value.id}"><p class="{if $value.id == $cate_id}active{/if}">{$value.name}</p></a>
+                    {/foreach}
+                </div>
+
+                <div class="shop_hook" style="display: block;">
+                    <div class="tuliao_box shequ_box">
+                        <!-- 10条 -->
+                        {foreach $article as $key => $value}
+                        <a href="{:url('index.forum.info',['id'=>$value.id])}" class="tuliao_list">
+                            <div class="list_avt oh mb20">
+                                <img src="{$value.avatar_url}" alt="" class="mr20">
+                                <div class=" fz18 c6 lh50 h50">{$value.nickname}</div>
+                            </div>
+                            <h3 class="t_title fz20 c3">{$value.title}</h3>
+                            <p class="t_info fz16 c6">{$value.desc}</p>
+                            <div class="oh t_time_box">
+                                <div class="time fl fz14 c9 lh30 oh">
+                                    <p class="fl">{$value.create_time|date="Y-m-d H:i:s"}</p>
+                                    <div class="fl oh t_icon_list">
+                                        <span class="fl lh30 icon--- fz18"></span>
+                                        <p class="fl">
+                                            {if $value.click < 10000}
+                                            {$value.click}
+                                            {else}
+                                            {$value.click / 10000}万
+                                            {/if}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="t_icon_box fr lh30">
+                                    <div class="fl oh t_icon_list">
+                                        <span class="fl lh30 icon-7 fz14"></span>
+                                        <p class="fl">{$value.comment_sum}</p>
+                                    </div>
+                                    <div class="fl oh t_icon_list">
+                                        <span class="fl lh30 icon-2 fz14"></span>
+                                        <p class="fl">{$value.like_sum}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        {/foreach}
+
+                    </div>
+                    <!-- 分页 -->
+                    <div style="text-align: center;margin-top: 10px;">
+                        {$article->render()|raw}
+                    </div>
+                </div>
+
+            </div>
+            <!-- 相关链接 -->
+            <div class="k1 oh">
+                <div class="f1_tab_title">
+                    <p class="active">相关连接</p>
+                </div>
+                <div class="tuliao_box oh" style="padding-bottom:20px">
+                    {foreach $about_link as $ley => $value}
+                    <a href="{:url('index.forum.info',['id'=>$value.id])}" class="oh tj_a_list">
+                        <h3 class="fz16 c6 lh40 fl">{$value.title}</h3>
+                        <div class="fr oh t_icon_list">
+                            <span class="fl lh40 icon--- fz18"></span>
+                            <p class="fl lh40">
+                                {if $value.click > 10000}
+                                {$value.click}万
+                                {else}
+                                {$value.click}
+                                {/if}
+                            </p>
+                        </div>
+                    </a>
+                    {/foreach}
+                </div>
+            </div>
+        </div>
+        {include file="forum/common/right"}
+    </div>
+</div>
+<!--  -->
+<div class="mb30"></div>
+{/block}

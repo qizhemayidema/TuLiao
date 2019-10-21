@@ -1,0 +1,32 @@
+<div class="fr w298">
+    <div class="k1 mb10">
+        <div class="info_title">
+            <h3 class="fz20 lh20 cf">行业大咖</h3>
+            <!--<a href="" class="fz16 cf lh20 fr">更多》</a>-->
+        </div>
+        <div class="p20_15">
+            {foreach $pro_user as $key => $value}
+            <a href="" class="daka_list mb30">
+                <div class="list_avt oh mb20">
+                    <img src="{$value.avatar_url}" alt="" class="mr20">
+                    <div class=" fz18 c3 lh25 h25 oh1">{$value.nickname}</div>
+                    <!--<div class="lh25 h25 oh1 fz16 c9">EEK棒(聚醚醚酮)是具备优</div>-->
+                </div>
+            </a>
+            {/foreach}
+        </div>
+    </div>
+    {if isset($cate[0]['name'])}
+    <div class="k1 mb10">
+        <div class="info_title">
+            <h3 class="fz20 lh20 cf">{$cate[0]['name']}</h3>
+            <a href="{:url('index.forum.index')}?cate_id={$cate[0]['id']}" class="fz16 cf lh20 fr">更多》</a>
+        </div>
+        <div class="index_recom_list">
+            {foreach $right_two as $key => $value}
+            <a href="{:url('index.forum.info',['id'=>$value.id])}">{$value.title}</a>
+            {/foreach}
+        </div>
+    </div>
+    {/if}
+</div>

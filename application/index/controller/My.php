@@ -365,20 +365,25 @@ class My extends Base
         if (!$validate->check($post)){
             return json(['code'=>0,'msg'=>$validate->getError()]);
         }
-
+        //加载默认配置
+        $config = \HTMLPurifier_Config::createDefault();
+        //实例化对象
+        $purifier = new \HTMLPurifier($config);
         $insert = [
             'type' => (new CommonForum())->articleType,
             'cate_id' => $post['cate_id'],
             'author_id' => $this->user->id,
             'title'     => $post['title'],
             'desc'      => $post['desc'],
-            'content'   => $post['content'],
+            'content'   => $purifier->purify($post['content']),
             'pic'       => (new Upload())->uploadBase64Pic($post['pic'],'forum/')['msg'],
             'create_time' => time(),
         ];
 
 
         (new Article())->insert($insert);
+
+        (new UserModel())->where(['id'=>$this->user->id])->setInc('forum_article_sum');
 
         return json(['code'=>1,'msg'=>'发布成功']);
     }
@@ -451,6 +456,7 @@ class My extends Base
         $msg = '';
 
         $bothStatus = (new BothStatusModel());
+        if ($user_id == $this->user->id) return json(['code'=>0,'msg'=>'自己无法关注自己']);
         if ($type == 1) {
             $flag = $bothStatus->where(['form_user_id' => $this->user->id, 'to_user_id' => $user_id])->find();
             if (!$flag) $bothStatus->insert([

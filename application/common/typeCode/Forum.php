@@ -13,4 +13,6 @@ class Forum
 {
     public $articleType = '3';
 
+    public $commentType = '1';
+
 }
