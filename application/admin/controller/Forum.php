@@ -16,7 +16,7 @@ class Forum extends Base
             ->join('user user','user.id = article.author_id and article.type='.$forumType->articleType)
             ->join('category cate','cate.id = article.cate_id')
             ->where(['article.delete_time'=>0])
-            ->field('article.*,cate.name cate_name,user.avatar_url,user.nickname')
+            ->field('article.*,cate.name cate_name,user.avatar_url,user.nickname,user.id user_id')
             ->order('article.id','desc')->paginate(15);
 
         $this->assign('article',$article);

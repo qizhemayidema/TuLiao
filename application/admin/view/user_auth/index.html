@@ -1,0 +1,122 @@
+{include file="common/source"}
+<script src="__STATIC__/js/plugins/fancybox/jquery.fancybox.js"></script>
+<div class="col-sm-12">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <!--<h5>-->
+            <!--<button type="button" onclick="window.location.href='{:url('/admin/Goods/add')}'"-->
+            <!--class="btn btn-w-m btn-primary">添加商品-->
+            <!--</button>-->
+            <!--</h5>-->
+        </div>
+        <div class="ibox-content">
+            <div class="example">
+
+                <table class="table table-bordered table-hover text-center">
+                    <thead>
+                    <tr class="text-center">
+                        <th style="text-align: center;">昵称</th>
+                        <th style="text-align: center;">头像</th>
+                        <th style="text-align: center;">身份证(正)</th>
+                        <th style="text-align: center;">身份证(反)</th>
+                        <th style="text-align: center;">姓名</th>
+                        <th style="text-align: center;">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach $user as $key => $value}
+                    <tr>
+                        <td>{$value->nickname}</td>
+                        <td><a target="_blank" href="{:url('index.forum.user',['id'=>$value.id])}">
+                            <img alt="image" width="38" height="38" class="img-circle" src="{$value.avatar_url}">
+                        </a></td>
+                        <td><a class="fancybox" href="{$value.id_card_front}">
+                            <img alt="image" style="width: 150px;" src="{$value.id_card_front}" />
+                            </a>
+                        </td>
+                        <td>
+                            <a class="fancybox" href="{$value.id_card_reverse}">
+                                <img alt="image" style="width: 150px;" src="{$value.id_card_reverse}" />
+                            </a>
+                        </td>
+                        <td>{$value.real_name}
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                            <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle" aria-expanded="false">操作 <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a onclick="changeAuth('{$value.id}',3)" href="#">通过</a>
+                                </li>
+                                <li><a onclick="changeAuth('{$value.id}',2)" href="#">拒绝</a>
+                                </li>
+                            </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+            <div style="text-align: center;">
+                {$user->render()|raw}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.fancybox').fancybox({
+            // openEffect: 'none',
+            // closeEffect: 'none'
+        });
+    });
+</script>
+<script>
+
+    changeAuth = function(user_id,status) {
+        $.ajax({
+            url: "{:url('admin/User_auth/changeAuth')}",
+            type: 'post',
+            dataType: 'json',
+            data:{
+                user_id : user_id,
+                status : status,
+            },
+            success: function (data) {
+                if (data.code == 0) {
+                    layer.msg(data.msg,{icon: 5})
+                } else {
+                    window.location.reload()
+                }
+            }
+        })
+    }
+
+    seeAuth = function($id){
+        var index = layer.open({
+            type:2,
+            content:"{:url('admin/User/authInfo')}?id="+$id
+        })
+        layer.full(index)
+    }
+
+    var removeArticle = function (_this, article_id) {
+        $.ajax({
+            url: "{:url('admin/Forum/delete')}",
+            type: 'post',
+            dataType: 'json',
+            data:{
+                article_id : article_id,
+            },
+            success: function (data) {
+                if (data.code == 0) {
+                    layer.msg(data.msg,{icon: 5})
+                } else {
+                    layer.msg('删除成功',{icon : 1})
+                    $(_this).parents('tr').remove();
+                }
+            }
+        })
+    }
+</script>

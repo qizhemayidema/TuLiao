@@ -31,7 +31,9 @@
                         <td><img src="{$value->pic}" alt="" style="width: 75px;"></td>
                         <td>{$value->title}</td>
                         <td><a target="_blank" href="{:url('index.forum.info',['id'=>$value.id])}">{:url('index.forum.info',['id'=>$value.id])}</a></td>
-                        <td><img alt="image" width="38" class="img-circle" src="{$value.avatar_url}"></td>
+                        <td>
+                            <a target="_blank" href="{:url('index.forum.user',['id'=>$value.user_id])}"><img alt="image" width="38" height="38" class="img-circle" src="{$value.avatar_url}"></a>
+                        </td>
                         <td>
                             {if $value->status == 0}
                             <a href="javascript:void(0);" onclick="checkStatus(this,0,'{$value->id}')">

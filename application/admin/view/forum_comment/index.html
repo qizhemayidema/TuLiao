@@ -24,7 +24,7 @@
                     {foreach $comment as $key => $value}
                     <tr>
                         <td>{$value->title}</td>
-                        <td><a target="_blank" href="{:url('index.forum.user',['id'=>$value.user_id])}"><img alt="image" width="38" class="img-circle" src="{$value->avatar_url}"></a></td>
+                        <td><a target="_blank" href="{:url('index.forum.user',['id'=>$value.user_id])}"><img alt="image" width="38" height="38" class="img-circle" src="{$value->avatar_url}"></a></td>
                         <td>{$value->comment}</td>
                         <td>
                             {if $value->is_show == 0}
