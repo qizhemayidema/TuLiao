@@ -112,7 +112,7 @@ class Forum extends Base
 
 
         //查询评论
-        $comment = (new CommentModel())->allowData()->where(['type'=>$this->forum->commentType])->paginate($this->comment_length);
+        $comment = (new CommentModel())->allowData()->where(['public_id'=>$id])->where(['type'=>$this->forum->commentType])->paginate($this->comment_length);
 
         if($article) $article->setInc('click');
 
@@ -145,7 +145,7 @@ class Forum extends Base
 
         switch ($cate){
             case 1:
-                $data = (new ArticleModel())->where(['type'=>$articleType])
+                $data = (new ArticleModel())->allowData()->where(['type'=>$articleType])
                     ->where(['author_id'=>$id])->paginate(5);
                 break;
             case 2:

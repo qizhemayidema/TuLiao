@@ -56,6 +56,13 @@ class Index extends Base
         //合作企业
         $business_parters = explode(',',$this->getConfig('business_parters'));
 
+        //前三热门帖子
+        $forumType = (new \app\common\typeCode\Forum())->articleType;
+        $forumArticle = (new Article())->allowData()
+            ->field('id,title,desc,click,comment_sum,like_sum,create_time')->where(['type'=>$forumType])->order('like_sum','desc')->limit(3)->select();
+        $newForumArticle = (new Article())->allowData()->where(['type'=>$forumType])
+            ->order('id','desc')->limit(12)->select();
+
         $this->assign('roll_pic',$roll_pic);
         $this->assign('information_roll_pic',$information_roll_pic);
         $this->assign('information_qr_code_1',$information_qr_code_1);
@@ -63,6 +70,8 @@ class Index extends Base
         $this->assign('goods_cate',$goods_cate);
         $this->assign('hot_product',$hot_product);
         $this->assign('information_cate',$information_cate);
+        $this->assign('forum',$forumArticle);
+        $this->assign('new_forum',$newForumArticle);
         $this->assign('goods',$goods);
         $this->assign('business_parters',$business_parters);
 

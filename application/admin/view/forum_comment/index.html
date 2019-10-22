@@ -1,0 +1,101 @@
+{include file="common/source"}
+<div class="col-sm-12">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <!--<h5>-->
+            <!--<button type="button" onclick="window.location.href='{:url('/admin/Goods/add')}'"-->
+            <!--class="btn btn-w-m btn-primary">添加商品-->
+            <!--</button>-->
+            <!--</h5>-->
+        </div>
+        <div class="ibox-content">
+            <div class="example">
+
+                <table class="table table-bordered table-hover text-center">
+                    <thead>
+                    <tr class="text-center">
+                        <th style="text-align: center;">文章</th>
+                        <th style="text-align: center;">用户</th>
+                        <th style="text-align: center;">内容</th>
+                        <th style="text-align: center;">是否显示</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach $comment as $key => $value}
+                    <tr>
+                        <td>{$value->title}</td>
+                        <td><a target="_blank" href="{:url('index.forum.user',['id'=>$value.user_id])}"><img alt="image" width="38" class="img-circle" src="{$value->avatar_url}"></a></td>
+                        <td>{$value->comment}</td>
+                        <td>
+                            {if $value->is_show == 0}
+                            <a href="javascript:void(0);" onclick="checkStatus(this,0,'{$value->id}')">
+                                <p><span class="label label-danger">已隐藏</span></p>
+                            </a>
+                            {else if $value->status == 1}
+                            <a href="javascript:void(0);" onclick="checkStatus(this,1,'{$value->id}')">
+                                <p><span class="label label-info">已显示</span></p>
+                            </a>
+                            {/if}
+                        </td>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+            <div style="text-align: center;">
+                {$comment->render()|raw}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    checkStatus = function(_this,old_status,comment_id) {
+        $.ajax({
+            url: "{:url('admin/Forum_comment/changeStatus')}",
+            type: 'post',
+            dataType: 'json',
+            data:{
+                comment_id : comment_id,
+            },
+            success: function (data) {
+                if (data.code == 0) {
+                    layer.msg(data.msg,{icon: 5})
+                } else {
+                    layer.msg('修改成功')
+                    let str = ``
+                    if (old_status == 0){
+                        str = `<a href="javascript:void(0);" onclick="checkStatus(this,1,'${comment_id}')">
+                                <p><span class="label label-info">已显示</span></p>
+                            </a>`
+                    } else{
+                        str = `<a href="javascript:void(0);" onclick="checkStatus(this,0,'${comment_id}')">
+                                <p><span class="label label-danger">已隐藏</span></p>
+                            </a>`
+                    }
+                    $(_this).parents('td').html(str)
+                }
+            }
+        })
+    }
+
+
+    var removeArticle = function (_this, article_id) {
+        $.ajax({
+            url: "{:url('admin/Forum/delete')}",
+            type: 'post',
+            dataType: 'json',
+            data:{
+                article_id : article_id,
+            },
+            success: function (data) {
+                if (data.code == 0) {
+                    layer.msg(data.msg,{icon: 5})
+                } else {
+                    layer.msg('删除成功',{icon : 1})
+                    $(_this).parents('tr').remove();
+                }
+            }
+        })
+    }
+</script>
