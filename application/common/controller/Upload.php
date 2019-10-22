@@ -92,4 +92,30 @@ class Upload extends Controller{
             return ['code'=>0,'msg'=>'error1'];
         }
     }
+
+    public function uploadOneVideo($file_path = null,$form_name = 'file')
+    {
+        if (request()->isPost()){
+            $file_path = $file_path ? config('app.upload_root_path') . $file_path : config('app.upload_root_path');
+            if (!file_exists('.' . $file_path)) {
+                mkdir('.' . $file_path, 0777,true);
+            }
+            $rules = [
+                'ext'   => 'mp4',
+                'size'  => 300 * 1024 * 1024,
+            ];
+            $file_info = request()->file($form_name)->validate($rules)->move('.'.$file_path);
+            if (!$file_info){
+                return json(['code'=>0,'msg'=>'格式仅支持m4,最大视频为300Mb']);
+            }
+            $path = $file_info->getSaveName();
+            $path = str_replace('\\','/',$path);
+            $file_path .= $path;
+
+            return json(['code'=>1,'msg'=>$file_path]);
+        }else{
+            return json(['code'=>0,'msg'=>'操作失误,请重新操作']);
+        }
+    }
+
 }

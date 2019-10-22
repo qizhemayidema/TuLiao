@@ -95,7 +95,7 @@ class Base extends Controller
                     header('Content-type: application/json');
                     exit(json_encode(['code' => 0, 'msg' => '请先登陆账号~'], 256));
                 }else{
-                    return $this->redirect('index');
+                    return $this->redirect('index/Index/index');
                 }
             }
             return $this->$name;
