@@ -1,0 +1,138 @@
+{include file="common/source"}
+<div class="col-sm-12">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <!--<h5>-->
+            <!--<button type="button" onclick="window.location.href='{:url('/admin/Goods/add')}'"-->
+            <!--class="btn btn-w-m btn-primary">添加商品-->
+            <!--</button>-->
+            <!--</h5>-->
+        </div>
+        <div class="ibox-content">
+            <div class="example">
+
+                <table class="table table-bordered table-hover text-center">
+                    <thead>
+                    <tr class="text-center">
+                        <th style="text-align: center;">订单号</th>
+                        <th style="text-align: center;">封面图</th>
+                        <th style="text-align: center;">支付金额</th>
+                        <th style="text-align: center;">状态</th>
+                        <th style="text-align: center;">创建时间</th>
+                        <th style="text-align: center;">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach $order as $key => $value}
+                    <tr>
+                        <td>{$value->order_code}</td>
+                        <td>
+                            <img alt="image" style="width: 150px;" src="{$value.pic}" />
+                        </td>
+                        <td>{$value.pay_money}</td>
+                        <td>
+                            {if $value->status == 1}
+                            <a href="javascript:void(0);">
+                                <p><span class="label label-warning">未付款</span></p>
+                            </a>
+                            {elseif $value->status == 2}
+                            <a href="javascript:void(0);">
+                                <p><span class="label label-info">已付款</span></p>
+                            </a>
+                            {elseif $value->status == 3}
+                            <a href="javascript:void(0);">
+                                <p><span class="label label-primary">已发货</span></p>
+                            </a>
+                            {else}
+                            <a href="javascript:void(0);">
+                                <p><span class="label label-success">已收货</span></p>
+                            </a>
+                            {/if}
+                        </td>
+                        <td>{$value.create_time|date="Y-m-d H:i:s"}</td>
+                        <td>
+                            <button class="btn btn-info " onclick="see({$value.id})" type="button"><i class="fa fa-road"></i> 查看详情</button>
+                            <div class="btn-group">
+                                <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle" aria-expanded="false">操作 <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a onclick="changeStatus('{$value.id}',3)" href="#">发货</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+            <div style="text-align: center;">
+                {$order->render()|raw}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.fancybox').fancybox({
+            // openEffect: 'none',
+            // closeEffect: 'none'
+        });
+    });
+</script>
+<script>
+
+    see = function(id){
+       var index = layer.open({
+            type:2,
+            content:"{:url('admin/Order/info')}?id="+id,
+        })
+        layer.full(index)
+    }
+    changeStatus = function(user_id,status) {
+        $.ajax({
+            url: "{:url('admin/Order/changeStatus')}",
+            type: 'post',
+            dataType: 'json',
+            data:{
+                order_id : user_id,
+                status : status,
+            },
+            success: function (data) {
+                if (data.code == 0) {
+                    layer.msg(data.msg,{icon: 5})
+                } else {
+                    window.location.reload()
+                }
+            }
+        })
+    }
+
+    seeAuth = function($id){
+        var index = layer.open({
+            type:2,
+            content:"{:url('admin/User/authInfo')}?id="+$id,
+            title:"订单详情"
+        })
+        layer.full(index)
+    }
+
+    var removeArticle = function (_this, article_id) {
+        $.ajax({
+            url: "{:url('admin/Forum/delete')}",
+            type: 'post',
+            dataType: 'json',
+            data:{
+                article_id : article_id,
+            },
+            success: function (data) {
+                if (data.code == 0) {
+                    layer.msg(data.msg,{icon: 5})
+                } else {
+                    layer.msg('删除成功',{icon : 1})
+                    $(_this).parents('tr').remove();
+                }
+            }
+        })
+    }
+</script>

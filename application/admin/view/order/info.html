@@ -1,0 +1,82 @@
+{include file="common/source"}
+<!-- 自定义js -->
+<script src="__STATIC__/js/content.js?v=1.0.0"></script>
+
+
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox-content p-xl">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <address>
+                            <strong>{$order.order_title}</strong><br/>
+                            <img src="{$order.pic}" style="width: 150px;" alt="">
+                            <br/>
+                        </address>
+                    </div>
+
+                    <div class="col-sm-6 text-right">
+                        <h4>订单编号：</h4>
+                        <h4 class="text-navy">{$order.order_code}</h4>
+                        <address>
+                            <strong>{$order.address.user_name}</strong><br>
+                            {$order.address.province} {$order.address.city} {$order.address.area}<br>
+                            {$order.address.address}
+                        </address>
+                        <p>
+                            <span><strong>日期：</strong> {$order.create_time|date="Y-m-d H:i:s"}</span>
+                            {if $order.pay_time}
+                            <br/>
+                            <span><strong>付款时间：</strong> {$order.pay_time|date="Y-m-d H:i:s"}</span>
+
+                            {/if}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="table-responsive m-t">
+                    <table class="table invoice-table">
+                        <thead>
+                        <tr>
+                            <th>清单</th>
+                            <th>数量</th>
+                            <th>单价</th>
+                            <th>总价</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $goods as $key => $value}
+                        <tr>
+                            <td>
+                                <div><strong>{$value.goods.title}</strong>
+                                </div>
+                            </td>
+                            <td>{$value.num}</td>
+                            <td>&yen;{$value.goods.real_price}</td>
+                            <td>&yen;{$value.goods.real_price * $value.num}</td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /table-responsive -->
+
+                <table class="table invoice-total">
+                    <tbody>
+                    <tr>
+                        <td><strong>总价：</strong>
+                        </td>
+                        <td>&yen;{$order.pay_money}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
