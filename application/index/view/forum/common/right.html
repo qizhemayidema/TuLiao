@@ -6,7 +6,7 @@
         </div>
         <div class="p20_15">
             {foreach $pro_user as $key => $value}
-            <a href="" class="daka_list mb30">
+            <a href="{:url('index.forum.user',['id'=>$value.id])}" class="daka_list mb30">
                 <div class="list_avt oh mb20">
                     <img src="{$value.avatar_url}" alt="" class="mr20">
                     <div class=" fz18 c3 lh25 h25 oh1">{$value.nickname}</div>

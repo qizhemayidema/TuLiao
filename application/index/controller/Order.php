@@ -63,7 +63,7 @@ class Order extends Base
         ];
 
         $messages = [
-            'address_id.require'    => '请求非法',
+            'address_id.require'    => '请选择一个收货地址',
             'shopping_ids.require'    => '请求非法',
             '__token__.token'       => '不能重复提交'
         ];

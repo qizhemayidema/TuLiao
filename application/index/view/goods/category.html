@@ -16,7 +16,7 @@
         <!--  -->
         <div class="w924 fr k1">
             <div class="kuang_title">
-                <h3 class="fz16 c3 fl position oh1"  style="width: 50%;">您的位置：<a href="" class="c3">首页</a> &gt; <a href="{:url('goodsCate')}" class="c3">商城</a> &gt; <a href="{:url('goodsCate',['one_cate'=>$one_cate.id])}" class="red">{$one_cate.name}</a></h3>
+                <h3 class="fz16 c3 fl position oh1"  style="width: 50%;">您的位置：<a href="{:url('/')}" class="c3">首页</a> &gt; <a href="{:url('goodsCate')}" class="c3">商城</a> &gt; <a href="{:url('goodsCate',['one_cate'=>$one_cate.id])}" class="red">{$one_cate.name}</a></h3>
                 <p></p>
                 <div class="sorting_box oh fr">
                     <div onclick="sortChange('{:url('goodsCate',['one_cate'=>$one_cate.id,'two_cate'=>$two_cate.id,'order'=>($order_price_num ? 0:1).'_'.$order_price_time_num])}')" name="order_online_time" class="sorting_list oh fr {if $order_online_time == 'asc'} active {/if}">

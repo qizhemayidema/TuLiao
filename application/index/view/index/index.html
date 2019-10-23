@@ -45,8 +45,11 @@
     <div class="fl w260">&nbsp;</div>
     <div class="fl tl_box oh">
         {foreach $hot_product as $key => $value}
+        <a href="{:url('product',['id'=>$value.id])}" class="tl_list">
+            <img src="{$value.pic}" alt="">
+        </a>
         {if $key == 7}
-        {break}
+        <?php break;?>
         {/if}
         {/foreach}
     </div>
@@ -148,13 +151,13 @@
             <div class="zanhui_box">
                 {if $key == 0}
                     {foreach $value.article as $key => $value}
+                    <?php if($key == 3) break;?>
                 <a href="{:url('informationInfo',['id'=>$value.id])}" class="zanhui_list">
                     <img src="{$value.pic}" alt="">
                     <p class="tac">{$value.title}</p>
                 </a>
                     {/foreach}
                 {/if}
-
             </div>
         </div>
         {/foreach}
@@ -212,7 +215,7 @@
     </div>
     <div class="index_bt oh">
         <h3 class="index_bt_h3">涂料商城</h3>
-        <a href="" class="index_bt_more">进入商城>></a>
+        <a href="{:url('goodsCate')}" class="index_bt_more">进入商城>></a>
     </div>
     <div class="k1 mb10">
         <div class="p35">

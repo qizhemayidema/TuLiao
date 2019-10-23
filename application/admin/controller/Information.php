@@ -21,6 +21,7 @@ class Information extends Base
             ->where(['article.type'=>$this->articleType,'article.delete_time'=>0])
             ->field('cate.name cate_name,article.id,article.title,article.click,article.create_time')
             ->field('article.pic,article.status,article.like_sum')
+            ->order('article.create_time','desc')
             ->paginate(20);
 
         $this->assign('article',$article);

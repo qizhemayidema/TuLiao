@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Admin\controller;
+namespace app\admin\controller;
 
 use app\http\middleware\AdminLoginCheck;
 use think\Controller;
