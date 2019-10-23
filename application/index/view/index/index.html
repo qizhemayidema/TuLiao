@@ -45,7 +45,7 @@
     <div class="fl w260">&nbsp;</div>
     <div class="fl tl_box oh">
         {foreach $hot_product as $key => $value}
-        <a href="{:url('product',['id'=>$value.id])}" class="tl_list">
+        <a href="{:url('productInfo',['id'=>$value.id])}" class="tl_list">
             <img src="{$value.pic}" alt="">
         </a>
         {if $key == 7}
@@ -167,6 +167,7 @@
         <h3 class="index_bt_h3">涂料社区</h3>
         <a href="{:url('index.forum.index')}" class="index_bt_more">进入社区>></a>
     </div>
+
     <div class="oh mb10">
         <div class="w888 k1 fl">
             <div class="tuliao_box">
@@ -260,7 +261,6 @@
 
 {block name="js"}
 <script>
-
     //开启加载层
     function openload() {
         $(".load_box").fadeIn(500);

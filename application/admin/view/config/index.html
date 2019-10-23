@@ -2,6 +2,11 @@
 
 <link rel="stylesheet" href="__STATIC__/js/plugins/webuploader/webuploader.css">
 <script src="__STATIC__/js/plugins/webuploader/webuploader.js"></script>
+<script src="__STATIC__/js/plugins/summernote/summernote.min.js"></script>
+<script src="__STATIC__/js/plugins/summernote/summernote-zh-CN.js"></script>
+<link rel="stylesheet" href="__STATIC__/css/plugins/summernote/summernote.css">
+<link rel="stylesheet" href="__STATIC__/css/plugins/summernote/summernote-bs3.css">
+
 <form action="" class="form-horizontal">
     <input type="hidden" name="index_information_qrCode_1" value="{$config.index_information_qrCode_1}">
     <input type="hidden" name="index_information_qrCode_2" value="{$config.index_information_qrCode_2}">
@@ -16,6 +21,8 @@
                     <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="false">上传</a>
                     </li>
                     <li><a data-toggle="tab" href="#tab-2" aria-expanded="true">信息</a>
+                    </li>
+                    <li><a data-toggle="tab" href="#tab-3" aria-expanded="true">页脚文章</a>
                     </li>
                 </ul>
 
@@ -150,6 +157,25 @@
                             </div>
                         </div>
                     </div>
+                    <div id="tab-3" class="tab-pane">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">关于我们</label>
+                            <div class="col-sm-8">
+                                <div class="summernote1" style="width: 700px;">
+                                    {$config.about_our|raw}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">联系我们</label>
+                            <div class="col-sm-8">
+                                <div class="summernote2" style="width: 700px;">
+                                    {$config.contact_our|raw}
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group" style="margin-top: 99px;">
                         <label class="col-sm-3 control-label"></label>
                         <div class="col-sm-5">
@@ -164,8 +190,25 @@
 
 
 <script>
+
+    $(document).ready(function () {
+        $('.summernote1').summernote({
+            height:"200",
+            lang: 'zh-CN'
+        });
+
+    });
+    $(document).ready(function () {
+        $('.summernote2').summernote({
+            height:"200",
+            lang: 'zh-CN'
+        });
+
+    });
     var save = function () {
         var formData = new FormData($('form')[0]);
+        formData.append('about_our',$(".summernote1").code())
+        formData.append('contact_our',$(".summernote2").code())
 
         $.ajax({
             url: "{:url('admin/Config/save')}",

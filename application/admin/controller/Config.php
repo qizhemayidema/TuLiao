@@ -34,6 +34,8 @@ class Config extends Base
             "business_parters"           => $post['business_parters'],
             "information_banner"         => $post['information_banner'],
             "footer_qr_code"             => $post['footer_qr_code'],
+            "about_our"                  => $post['about_our'],
+            "contact_our"                => $post['contact_our'],
         ];
 
 
