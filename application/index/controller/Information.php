@@ -83,6 +83,13 @@ class Information extends Base
         //分类
         $cate = (new CategoryModel())->getList($this->articleCacheName,$this->articleCateType);
 
+        if (!$cate_id){
+            if (isset($cate[0])){
+                $cate_id = $cate['0']['id'];
+            }else{
+                $cate_id = 0;
+            }
+        }
         //banner
         $banner = $this->getConfig('information_banner');
 

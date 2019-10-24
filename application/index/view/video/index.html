@@ -1,0 +1,31 @@
+{extend name="video/common/base"}
+
+{block name="title"}
+{$cate_active['name']} - 视频
+{/block}
+
+{block name="content"}
+<div class="p0_25">
+
+    <!-- 5条 -->
+    {foreach $article as $key => $value}
+    <a href="{:url('index.video.info',['id'=>$value.id])}">
+        <div class="new_list oh">
+
+            <img src="{$value.pic}" alt="" class="fl">
+            <div class="new_list_info oh">
+                <h3 class="fz18">{$value.title}</h3>
+                <p class="fz16 lh30">
+                    {$value.desc}
+                </p>
+            </div>
+        </div>
+    </a>
+    {/foreach}
+    <!--  -->
+    <!-- 分页 -->
+    <div style="text-align: center;margin-top: 15px;">
+        {$article->render()|raw}
+    </div>
+</div>
+{/block}

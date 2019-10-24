@@ -83,6 +83,7 @@ class Order extends Base
             ->whereIn('shopping.id',$post['shopping_ids'])
             ->field('goods.*,shopping.num goods_num')
             ->select()->toArray();
+        if(!$goods) return json(['code'=>0,'msg'=>'操作非法']);
         $order_goods = [];
         $pay_money = 0;
         $order_price = '';

@@ -1,0 +1,63 @@
+{extend name="base/base"}
+
+{block name="title"}{/block}
+
+{block name="extends_source"}
+<style>
+    .about_left {
+        background: #fafafa;
+        width: 254px;
+        float: left;
+    }
+
+    .about_left a {
+        display: block;
+        border-left: 6px solid #fafafa;
+        line-height: 70px;
+        height: 70px;
+        text-align: center;
+    }
+
+    .about_left .active {
+        border-left: 6px solid #ff4641;
+        background: #fff;
+    }
+    .about_right {
+        width: 946px;
+    }
+
+    .about_right_info img {
+        max-width: 100%;
+    }
+</style>
+{/block}
+
+
+{block name="body"}
+
+<div class="w1200 clearfix">
+    <div class=" lh40 fz14 ">
+        <a href="" class="c3">&nbsp;</a>
+        <a href="" class="c3">&nbsp;</a>
+    </div>
+    <!-- /设计学院/ -->
+    <div class="bgf  mt20 mb20 oh" style="margin-bottom: 75px;">
+        <div class="about_box oh">
+            <div class="about_left">
+                <a href="{:url('index.Footer_article.index',['type'=>'about_our'])}" class="bb1 {if $type == 'about_our'}active{/if}">关于我们</a>
+                <a href="{:url('index.Footer_article.index',['type'=>'contact_our'])}" class="bb1 {if $type == 'contact_our'}active{/if}">联系我们</a>
+            </div>
+            <div class="about_right fl">
+                <div class="p25">
+                    <div class="about_right_t bb1 fz16 lh40 c3">
+                        {$title}
+                    </div>
+                    <div class="about_right_info fz16 c6 p10">
+                        {$content|raw}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

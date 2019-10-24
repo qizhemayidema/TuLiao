@@ -13,13 +13,14 @@
         <!-- <div class="zanwu">暂无数据</div> -->
         <div class="p30">
             {foreach $article as $key => $value}
-            <a href="" class="tuliao_list">
+            <a href="{:url('index.forum.info',['id'=>$value.id])}" class="tuliao_list">
                 <div class="list_avt oh mb20">
                     <img src="{$user.avatar_url}" alt="" class="mr20">
                     <div class=" fz18 c6 lh50 h50">{$user.nickname}</div>
                 </div>
                 <h3 class="t_title fz20 c3">{$value.title}</h3>
                 <p class="t_info fz16 c6">{$value.desc}</p>
+            </a>
                 <div class="oh t_time_box">
                     <div class="time fl fz14 c9 lh30 oh">
                         <p class="fl">{$value.create_time|date="Y-m-d H:i:s"}</p>
@@ -43,9 +44,12 @@
                             <span class="fl lh30 icon-2 fz14"></span>
                             <p class="fl">{$value.like_sum}</p>
                         </div>
+                        <div class="fl oh t_icon_list" onclick="removeArticle({$value.id})">
+                            <span class="fl lh30 icon-8 fz14"></span>
+                            <p class="fl"></p>
+                        </div>
                     </div>
                 </div>
-            </a>
             {/foreach}
         </div>
     </div>
@@ -54,4 +58,25 @@
         {$article->render()|raw}
     </div>
 </div>
+{/block}
+
+{block name="js"}
+<script>
+    function removeArticle (id){
+        layer.confirm('您确定删除吗',function(){
+            $.ajax({
+                url:"{:url('index/My/articleDelete')}",
+                type:'post',
+                dataType:"json",
+                data:{id:id},
+                success:function(data){
+                    layer.msg(data.msg)
+                    if (data.code == 1){
+                        setTimeout(function(){window.location.reload()},1200)
+                    }
+                }
+            })
+        })
+    }
+</script>
 {/block}

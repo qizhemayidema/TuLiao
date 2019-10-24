@@ -153,9 +153,9 @@ class My extends Base
             'province'  => 'require',
             'city'  => 'require',
             'area'  => 'require',
-            'address'  => 'require|max:128',
+            'address'  => 'require|max:128|min:6',
             'user_name'  => 'require|max:32',
-            'phone'  => 'require|max:11',
+            'phone'  => 'require|max:11|regex:1[3-8]{1}[0-9]{9}',
         ];
 
         $messages = [
@@ -164,8 +164,11 @@ class My extends Base
             'area.require'      => '区必须选择',
             'address.require'   => '详细地址必须填写',
             'address.max'       => '详细地址最大长度为128',
+            'address.min'       => '详细地址最短长度为6',
             'user_name.require' => '姓名必须填写',
-            'phone.require'     => '电话必须填写'
+            'phone.require'     => '电话必须填写',
+            'phone.max'         => '电话填写错误',
+            'phone.regex'         => '电话填写错误',
         ];
 
         $validate = new Validate($rules,$messages);
@@ -214,7 +217,7 @@ class My extends Base
             'area'  => 'require',
             'address'  => 'require|max:128',
             'user_name'  => 'require|max:32',
-            'phone'  => 'require|max:11',
+            'phone'  => 'require|max:11|regex:1[3-8]{1}[0-9]{9}',
         ];
 
         $messages = [
@@ -225,7 +228,9 @@ class My extends Base
             'address.require'   => '详细地址必须填写',
             'address.max'       => '详细地址最大长度为128',
             'user_name.require' => '姓名必须填写',
-            'phone.require'     => '电话必须填写'
+            'phone.require'     => '电话必须填写',
+            'phone.max'         => '电话填写错误',
+            'phone.regex'         => '电话填写错误',
         ];
 
         $validate = new Validate($rules,$messages);
@@ -401,6 +406,19 @@ class My extends Base
         return $this->fetch();
     }
 
+    public function articleDelete(Request $request)
+    {
+        $userId = $this->user->id;
+        $id = $request->post('id');
+        if (!$id) return json(['code'=>0,'msg'=>'请求非法']);
+
+        $forumType = new \app\common\typeCode\Forum();
+        Article::where(['author_id'=>$userId,'id'=>$id,'type'=>$forumType->articleType])
+            ->update(['delete_time'=>time()]);
+
+        return json(['code'=>1,'msg'=>'success']);
+    }
+
 
     public function authChange(Request $request)
     {
@@ -509,5 +527,6 @@ class My extends Base
 
         return json(['code' => 1, 'msg' => '修改成功']);
     }
+
 
 }

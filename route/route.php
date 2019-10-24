@@ -15,11 +15,12 @@ use think\facade\Route;
 Route::group('/',function(){
     Route::get('/','index/Index/index');
     Route::group('product',function(){
+        Route::get('/','index/Product/index')->name('index.product.index');
         Route::get('/:id','index/Product/info')->name('productInfo');
 
     });
     Route::group('information',function(){
-        Route::get('/category/:id','index/Information/category')->name('informationCate');
+        Route::get('/category/[:id]','index/Information/category')->name('informationCate');
         Route::get('/:id','index/Information/info')->name('informationInfo');
     });
     Route::group('goods',function(){
@@ -50,6 +51,13 @@ Route::group('/',function(){
         Route::get('/','index/Forum/index')->name('index.forum.index');
         Route::get('user/:id','index/Forum/user')->name('index.forum.user');
         Route::get('/:id','index/Forum/info')->name('index.forum.info');
+    });
+    Route::group('video',function(){
+        Route::get('/cate/[:id]','index/Video/index')->name('index.video.index');
+        Route::get('/:id','index/Video/info')->name('index.video.info');
+    });
+    Route::group('info',function(){
+        Route::get('/:type','index/Footer_article/index')->name('index.footer_article.index');
     });
     Route::get('search','index/Search/index')->name('index.search.index');
 });

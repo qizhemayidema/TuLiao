@@ -24,7 +24,7 @@
                     <div class="tuliao_box shequ_box">
                         <!-- 10条 -->
                         {foreach $article as $key => $value}
-                        <a href="{:url('index.forum.info',['id'=>$value.id])}" class="tuliao_list">
+                        <a href="{:url('index.forum.info',['id'=>$value.id])}" class="tuliao_list" style="margin-bottom: 25px;">
                             <div class="list_avt oh mb20">
                                 <img src="{$value.avatar_url}" alt="" class="mr20">
                                 <div class=" fz18 c6 lh50 h50">{$value.nickname}</div>

@@ -33,4 +33,27 @@ class Product extends Base
 
         return $this->fetch();
     }
+
+    public function index(Request $request)
+    {
+        //热门产品 以及推荐
+        $hot_article = ArticleModel::where(['status'=>1,'delete_time'=>0])
+            ->where(['type'=>$this->articleType])->order('click','desc')
+            ->limit(8)->field('id,pic,title')->select();
+
+        //合作企业
+        $business_parters = explode(',',$this->getConfig('business_parters'));
+
+        $list = Article::where(['status'=>1,'type'=>$this->articleType])->paginate(15);
+
+        $this->assign('hot_article',$hot_article);
+
+        $this->assign('business_parters',$business_parters);
+
+        $this->assign('list',$list);
+
+        return $this->fetch();
+
+
+    }
 }

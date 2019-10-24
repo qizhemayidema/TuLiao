@@ -40,6 +40,12 @@ class Goods extends Base
     {
         $data = $request->post();
 
+        $cate = Category::where(['id'=>$data['cate_id']])->find();
+
+        if ($cate['p_id'] == 0){
+            return json(['code'=>0,'msg'=>'必须为二级分类']);
+        }
+
         $rules = [
             'cate_id'   => 'require',
             'title' => 'require|max:60',
@@ -76,11 +82,7 @@ class Goods extends Base
 
             return json(['code'=>0,'msg'=>$validate->getError()]);
         }
-        $cate = Category::where(['id'=>$data['cate_id']])->find();
 
-        if ($cate['p_id'] == 0){
-            return json(['code'=>0,'msg'=>'必须为二级分类']);
-        }
 
         $insert = [
             'cate_id'   => $data['cate_id'],
@@ -127,6 +129,13 @@ class Goods extends Base
     {
         $data = $request->post();
 
+        $cate = Category::where(['id'=>$data['cate_id']])->find();
+
+        if ($cate['p_id'] == 0){
+            return json(['code'=>0,'msg'=>'必须为二级分类']);
+        }
+
+
         $rules = [
             'id'        => 'require',
             'cate_id'   => 'require',
@@ -161,11 +170,6 @@ class Goods extends Base
         if (!$validate->check($data)){
 
             return json(['code'=>0,'msg'=>$validate->getError()]);
-        }
-        $cate = Category::where(['id'=>$data['cate_id']])->find();
-
-        if ($cate['p_id'] == 0){
-            return json(['code'=>0,'msg'=>'必须为二级分类']);
         }
 
         $update = [

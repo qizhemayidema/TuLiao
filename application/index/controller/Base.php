@@ -93,7 +93,7 @@ class Base extends Controller
             if (!$this->$name) {
                 if (\request()->isAjax()){
                     header('Content-type: application/json');
-                    exit(json_encode(['code' => 0, 'msg' => '请先登陆账号~'], 256));
+                    exit(json_encode(['code' => 0, 'msg' => '请先登录账号~'], 256));
                 }else{
                     return $this->redirect('index/Index/index');
                 }

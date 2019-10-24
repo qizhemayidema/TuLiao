@@ -116,12 +116,17 @@ class Forum extends Base
 
         if($article) $article->setInc('click');
 
+        //查询作者信息
+        $author = (new UserModel())->where(['id'=>$article['author_id']])->field('id,nickname')->find();
+
+
+
         $this->assign('article',$article);
         $this->assign('comment',$comment);
         $this->assign('comment_floor_start',$comment->currentPage() * $this->comment_length - $this->comment_length);
         $this->assign('is_like',$is_like);
         $this->assign('id',$id);
-
+        $this->assign('author',$author);
         return $this->fetch();
     }
 
@@ -199,6 +204,8 @@ class Forum extends Base
     {
         $user = $this->userInfo;
 
+
+
         $post = $request->post();
         $rules = [
             'content'   => 'require|max:300',
@@ -219,6 +226,10 @@ class Forum extends Base
             return json(['code'=>0,'msg'=>$validate->getError()]);
         }
 
+        if (!$this->commentAuth($user)){
+            return json(['code'=>0,'msg'=>'24小时内评论已达上限']);
+        }
+
         $insert = [
             'type'      => 1,
             'public_id' => $post['id'],
@@ -233,7 +244,7 @@ class Forum extends Base
 
         (new ArticleModel())->where(['id'=>$post['id']])->setInc('comment_sum');
 
-        return json(['code'=>1,'msg'=>'success']);
+        return json(['code'=>1,'msg'=>'删除成功']);
     }
 
     //点赞
@@ -264,5 +275,28 @@ class Forum extends Base
         } else {
             return json(['success' => false, 'msg' => $upload['msg'], 'file_path' => '']);
         }
+    }
+
+    public function commentAuth($user)
+    {
+        $maxNum = 20;
+        $cacheName = 'comment_'.$user['id'];
+        $cache = (new \think\Cache([
+            'type'  => config('cache.type'),
+            'expire' => 24 * 60 * 60,
+        ]));
+        if ($cache->has($cacheName)){
+            $num = $cache->get($cacheName);
+            if ($num >= $maxNum){
+                return false;
+            }else{
+                $cache->inc($cacheName);
+                return true;
+            }
+        }else{
+            $cache->set($cacheName,1);
+        }
+
+        return true;
     }
 }

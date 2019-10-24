@@ -45,6 +45,7 @@ class Video extends Base
         $rules = [
             'pic'   => 'require',
             'title' => 'require|max:30',
+            'desc'  => 'require',
             'source_url' => 'require',
             'cate_id'   => 'require',
         ];
@@ -53,6 +54,7 @@ class Video extends Base
             'title.require' => '标题必须填写',
             'title.max'     => '标题最大长度为30字符',
             'source_url.require'    => '必须上传视频',
+            'desc.require'  => '简介必须填写',
             'cate_id.require'   => '必须选择一个分类',
         ];
 
@@ -68,6 +70,7 @@ class Video extends Base
             'pic'   => $post['pic'],
             'type'  => (new \app\common\typeCode\Video())->articleType,
             'content' => "",
+            'desc'  => $post['desc'],
             'create_time' => time(),
         ];
 
@@ -104,6 +107,7 @@ class Video extends Base
             'id'    => 'require',
             'pic'   => 'require',
             'title' => 'require|max:30',
+            'desc'  => 'require',
             'source_url' => 'require',
             'cate_id'   => 'require',
         ];
@@ -112,8 +116,10 @@ class Video extends Base
             'title.require' => '标题必须填写',
             'title.max'     => '标题最大长度为30字符',
             'source_url.require'    => '必须上传视频',
+            'desc.require'  => '简介必须填写',
             'cate_id.require'   => '必须选择一个分类',
         ];
+
 
         $validate = new Validate($rules,$messages);
         if (!$validate->check($post)){
@@ -125,6 +131,7 @@ class Video extends Base
             'title'   => $post['title'],
             'source_url'   => $post['source_url'],
             'pic'   => $post['pic'],
+            'desc'  => $post['desc'],
         ];
 
         (new ArticleModel())->where(['id'=>$post['id']])->update($update);

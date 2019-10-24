@@ -1,0 +1,19 @@
+{extend name="video/common/base"}
+
+{block name="title"}
+{$article['title']} - 视频
+{/block}
+
+{block name="content"}
+<div class="kuang_title">
+    <h3 class="fz16 c3 fl position">您的位置：<a href="/" class="c3">首页</a> &gt; <a href="{:url('index.video.index',['id'=>$article.cate_id])}" class="c3">视频</a> &gt; <a href="" class="red">{$article.title}</a></h3>
+    <a href="" class="k_more fz14 c3"></a>
+    <p></p>
+</div>
+<div class="n_info_title tac">{$article.title}</div>
+<div class="info fz16 lh30 c3">
+    <video style="width: 100%;" controls poster="{$article.pic}" />
+     <source src="{$article.source_url}" type="video/mp4">
+    </video>
+</div>
+{/block}

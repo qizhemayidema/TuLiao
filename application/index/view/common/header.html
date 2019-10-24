@@ -9,7 +9,7 @@
             <a href="javascript:void(0);" onclick="showMarks(loginHTML);">登录</a>
             <a href="javascript:void(0);" onclick="showMarks(registerHTML);">注册</a>
             {/if}
-            <a href="javascript:void(0);">联系我们</a>
+            <a href="{:url('index.Footer_article.index',['type'=>'contact_our'])}">联系我们</a>
         </div>
     </div>
 </div>
@@ -34,7 +34,7 @@
             <a href="{:url('/')}" class="red fz18 nav_a h50 lh50">首页</a>
         </div>
         <div class="nav_list fl oh">
-            <a href="" class="c6 fz18 nav_a h50 lh50 tac br1 fl">产品</a>
+            <a href="{:url('index.product.index')}" class="c6 fz18 nav_a h50 lh50 tac br1 fl">产品</a>
             <div class="a_list fl" style="width: 270px;">
                 {foreach $top_product as $key => $value}
                 <a href="{:url('productInfo',['id'=>$value.id])}">{$value.title}</a>
@@ -42,7 +42,7 @@
             </div>
         </div>
         <div class="nav_list fl oh">
-            <a href="" class="c6 fz18 nav_a h50 lh50 tac br1 fl">资讯</a>
+            <a href="{:url('informationCate')}" class="c6 fz18 nav_a h50 lh50 tac br1 fl">资讯</a>
             <div class="a_list fl" style="width: 270px;">
                 {foreach $top_information as $key => $value}
                 <a href="{:url('informationCate',['id'=>$value.id])}">{$value.name}</a>
@@ -51,7 +51,7 @@
         </div>
 
         <div class="nav_list fl oh">
-            <a href="" class="c6 fz18 nav_a h50 lh50 tac br1 fl">社区</a>
+            <a href="{:url('index.forum.index')}" class="c6 fz18 nav_a h50 lh50 tac br1 fl">社区</a>
             <div class="a_list fl" style="width: 180px;">
                 {foreach $top_forum as $key => $value}
                 <a href="{:url('index.forum.index')}?cate_id={$value.id}">{$value.name}</a>
@@ -59,10 +59,10 @@
             </div>
         </div>
         <div class="nav_list fl oh">
-            <a href="" class="c6 fz18 nav_a h50 lh50 tac br1 fl">视频</a>
+            <a href="{:url('index.video.index')}" class="c6 fz18 nav_a h50 lh50 tac br1 fl">视频</a>
             <div class="a_list fl" style="width: 90px;">
                 {foreach $top_video as $key => $value}
-                <a href="">{$value.name}</a>
+                <a href="{:url('index.video.index',['id'=>$value.id])}">{$value.name}</a>
                 {/foreach}
             </div>
         </div>

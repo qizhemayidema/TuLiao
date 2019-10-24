@@ -40,6 +40,9 @@
                                 <p class="fl">{$article.like_sum}</p>
                             </div>
                         </div>
+                        <div class="time fl fz14 c9 lh30 oh list_avt oh mb20">
+                            <a href="{:url('index.forum.user',['id'=>$author.id])}"><p class="fr">{$author.nickname}</p></a>
+                        </div>
                         <div class="time fr fz14 c9 lh30 oh">
                             <p class="fl">{$article.create_time|date="Y-m-d H:i:s"}</p>
                             <div class="fl oh t_icon_list">
@@ -93,7 +96,7 @@
                 <div class="fabu_box ">
                     <div class="mb20">
                         <!--<textarea name="content" id="editor" placeholder=""></textarea>-->
-                        <textarea name="content" cols="135" rows="10" placeholder="快来评论一下吧"></textarea>
+                        <textarea name="content" style="width: 100%;" rows="10" placeholder="快来评论一下吧"></textarea>
                     </div>
                     <div class="p10 oh">
                         <div class="fabu_yzm fz14">

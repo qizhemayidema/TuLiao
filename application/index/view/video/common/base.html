@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+        .ccz {
+            width: 100%;
+            height: 200px;
+            position: absolute;
+            z-index: 2;
+            top: 0;
+            left: 0;
+            background: rgba(0, 0, 0, .5);
+        }
+
+        .ccz img {
+            width: 60px;
+            height: 60px;
+            margin-top: 70px;
+            text-align: center;
+        }
+    </style>
+    <title>{block name="title"}{/block}</title>
+    {include file="common/source"}
+    {include file="common/login_js"}
+    {block name="extends_source"}{/block}
+
+</head>
+<body>
+{include file="common/header"}
+<!--  -->
+<div id="content">
+    <div class="w1200 oh">
+        <div class="fl red fz16 hot_name">热点视频：</div>
+        <div class="fl oh hot_list">
+            {foreach $hot_article as $key => $value}
+            <a href="{:url('productInfo',['id'=>$value.id])}" class="fz16 c6">{$value.title}</a>
+            {/foreach}
+        </div>
+    </div>
+
+    <div class="w1200">
+        <div class="index_bt oh">
+            <h3 class="index_bt_h3">视频</h3>
+        </div>
+        <div class="oh mb30">
+            <div class="w900 fl k1">
+                {block name="content"}
+
+                {/block}
+            </div>
+            <div class="fr w280">
+                <div class="info_title">
+                    <h3 class="fz20 lh20 cf">分类</h3>
+                    <!-- <a href="" class="fz16 cf lh20 fr">更多》</a> -->
+                </div>
+                <div class="k1 mb10">
+                    {foreach $cate as $key => $value}
+                    <div class="fk_list">
+                        <a href="{:url('index.video.index',['id'=>$value.id])}">
+                            <span class="icon-AK lh40 fz12"></span>
+                            <p class="lh40 fz18">{$value.name}</p>
+                        </a>
+                    </div>
+                    {/foreach}
+                </div>
+                <div class="info_title">
+                    <h3 class="fz20 lh20 cf">推荐视频</h3>
+                </div>
+                <div class="k1 mb10 tj_box">
+                    {foreach $hot_article as $key => $value}
+                    <div class="tj_list">
+                        <a href="{:url('productInfo',['id'=>$value.id])}">
+                            <img src="{$value.pic}" alt="">
+                        </a>
+                    </div>
+                    {/foreach}
+                </div>
+            </div>
+        </div>
+        <!--  -->
+        <div class="index_bt oh">
+            <h3 class="index_bt_h3">合作企业</h3>
+        </div>
+        <!-- 合作伙伴 -->
+        <div class="k1 mb20">
+            <div class="huoban_box oh">
+                <!-- 28条 -->
+                {foreach $business_parters as $key => $value}
+                {if $value}
+                <div class="huoban_list fl k1 tac">
+                    <span></span>
+                    <a href="">
+                        <img src="{$value}" alt="">
+                    </a>
+                </div>
+                {/if}
+                {/foreach}
+                <!--  -->
+            </div>
+        </div>
+    </div>
+    <div class="mb30"></div>
+</div>
+
+{include file="common/footer"}
+</body>
+{block name="js"}{/block}
+</html>

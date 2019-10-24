@@ -46,13 +46,13 @@
         '</div>' +
         '</div>' +
         '<div class="login_list">' +
-        '<input id="pwd" type="password" class="fz14 c3" data-reg="/\\S/" data-validation="true" data-error="请输入密码" placeholder="请输入密码">' +
+        '<input id="pwd" type="password" class="fz14 c3" data-reg="/\\S/" data-validation="true" data-error="请输入新的密码" placeholder="请输入新的密码">' +
         '</div>' +
         '<div class="login_list">' +
         '<input id="pwd1" type="password" class="fz14 c3" data-reg="/\\S/" data-validation="true" data-error="请确认密码" placeholder="请确认密码">' +
         '</div>' +
         '<div class="submit_btn">' +
-        '<button type="button" class="" onclick="submit(\'/index/Login/rePwd\');">找回密码</button>' +
+        '<button type="button" class="" onclick="submit(\'/index/Login/rePwd\');">重置密码</button>' +
         '</div>' +
         '<div class="w314 fz14 lh30 c9">已有账号？<a href="javascript:void(0);" class="ced3237" onclick="showMarks(loginHTML,1);">登录</a></div>';
 
@@ -100,7 +100,7 @@
                 var msg = $(el).attr('data-error');
                 var value = $(el).val();
                 if (!reg.test(value)) {
-                    $.alert(msg);
+                    layer.msg(msg);
                     isSubmit = false;
                     return false;
                 }
@@ -255,7 +255,7 @@
         if (!isGetCode) {
             var userreg = /^1[3-9]\d{9}$/;
             if (!userreg.test($("#tel").val())) {
-                $.alert('电话号码不正确')
+                layer.msg('电话号码不正确')
                 return;
             }
             $.ajax({
